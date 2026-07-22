@@ -108,7 +108,7 @@ function SupervisorDashboard() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("asistencia")
-        .select("id, presente, clase:clases!inner(id, titulo, fecha, curso_id), estudiante:profiles(full_name)")
+        .select("id, presente, clase:clases!inner(id, titulo, fecha, curso_id), estudiante:profiles!asistencia_estudiante_id_fkey(full_name)")
         .in("clase.curso_id", cursoIds)
         .order("created_at", { ascending: false });
       if (error) throw error;
