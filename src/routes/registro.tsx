@@ -36,21 +36,29 @@ function RegisterPage() {
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (loading) return;
     setLoading(true);
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `${window.location.origin}/login`,
-        data: { full_name: fullName, role: "estudiante" },
-      },
-    });
-    setLoading(false);
-    if (error) {
-      toast.error(translateError(error.message));
-      return;
+    try {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/login`,
+          data: { full_name: fullName, role: "estudiante" },
+        },
+      });
+      if (error) {
+        toast.error(translateError(error.message));
+        return;
+      }
+      toast.success("Cuenta creada. Revisa tu correo para confirmarla.");
+      setSent(true);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Error inesperado al crear la cuenta.";
+      toast.error(msg);
+    } finally {
+      setLoading(false);
     }
-    setSent(true);
   };
 
   if (sent) {
