@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -31,7 +31,9 @@ function translateError(msg: string) {
   if (m.includes("invalid login")) return "Credenciales incorrectas. Verifica tu correo y contraseña.";
   if (m.includes("email not confirmed")) return "Tu correo aún no ha sido confirmado. Revisa tu bandeja de entrada.";
   if (m.includes("user not found")) return "No existe una cuenta con ese correo.";
-  return msg;
+  if (m.includes("rate limit") || m.includes("too many requests"))
+    return "Has enviado demasiadas solicitudes. Espera un momento e intenta de nuevo.";
+  return "No pudimos iniciar sesión. Por favor, intenta de nuevo en unos minutos.";
 }
 
 function LoginPage() {
@@ -40,6 +42,7 @@ function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const inFlightRef = useRef(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -50,18 +53,34 @@ function LoginPage() {
     });
   }, [navigate, search.redirect]);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    // Bloquear el envío nativo del formulario inmediatamente
     e.preventDefault();
+    e.stopPropagation();
+
+    // Evitar envíos múltiples incluso si React aún no ha actualizado el estado
+    if (inFlightRef.current) return;
+    inFlightRef.current = true;
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    setLoading(false);
-    if (error) {
-      toast.error(translateError(error.message));
-      return;
+
+    try {
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+      if (error) {
+        toast.error(translateError(error.message));
+        return;
+      }
+
+      toast.success("¡Bienvenido/a!");
+      const target = isSafePath(search.redirect) ? search.redirect! : "/aula-virtual";
+      navigate({ to: target, replace: true });
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Error inesperado al iniciar sesión.";
+      toast.error(msg);
+    } finally {
+      setLoading(false);
+      inFlightRef.current = false;
     }
-    toast.success("¡Bienvenido/a!");
-    const target = isSafePath(search.redirect) ? search.redirect! : "/aula-virtual";
-    navigate({ to: target, replace: true });
   };
 
   return (
