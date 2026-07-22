@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VoluntariadoRouteImport } from './routes/voluntariado'
 import { Route as TransparenciaRouteImport } from './routes/transparencia'
+import { Route as RegistroRouteImport } from './routes/registro'
 import { Route as QuienesSomosRouteImport } from './routes/quienes-somos'
 import { Route as NoticiasRouteImport } from './routes/noticias'
 import { Route as LoginRouteImport } from './routes/login'
@@ -34,6 +35,11 @@ const VoluntariadoRoute = VoluntariadoRouteImport.update({
 const TransparenciaRoute = TransparenciaRouteImport.update({
   id: '/transparencia',
   path: '/transparencia',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegistroRoute = RegistroRouteImport.update({
+  id: '/registro',
+  path: '/registro',
   getParentRoute: () => rootRouteImport,
 } as any)
 const QuienesSomosRoute = QuienesSomosRouteImport.update({
@@ -119,6 +125,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/noticias': typeof NoticiasRoute
   '/quienes-somos': typeof QuienesSomosRoute
+  '/registro': typeof RegistroRoute
   '/transparencia': typeof TransparenciaRoute
   '/voluntariado': typeof VoluntariadoRoute
   '/directorio-artesanos/$id': typeof DirectorioArtesanosIdRoute
@@ -137,6 +144,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/noticias': typeof NoticiasRoute
   '/quienes-somos': typeof QuienesSomosRoute
+  '/registro': typeof RegistroRoute
   '/transparencia': typeof TransparenciaRoute
   '/voluntariado': typeof VoluntariadoRoute
   '/directorio-artesanos/$id': typeof DirectorioArtesanosIdRoute
@@ -156,6 +164,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/noticias': typeof NoticiasRoute
   '/quienes-somos': typeof QuienesSomosRoute
+  '/registro': typeof RegistroRoute
   '/transparencia': typeof TransparenciaRoute
   '/voluntariado': typeof VoluntariadoRoute
   '/directorio-artesanos/$id': typeof DirectorioArtesanosIdRoute
@@ -176,6 +185,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/noticias'
     | '/quienes-somos'
+    | '/registro'
     | '/transparencia'
     | '/voluntariado'
     | '/directorio-artesanos/$id'
@@ -194,6 +204,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/noticias'
     | '/quienes-somos'
+    | '/registro'
     | '/transparencia'
     | '/voluntariado'
     | '/directorio-artesanos/$id'
@@ -212,6 +223,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/noticias'
     | '/quienes-somos'
+    | '/registro'
     | '/transparencia'
     | '/voluntariado'
     | '/directorio-artesanos/$id'
@@ -231,6 +243,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   NoticiasRoute: typeof NoticiasRoute
   QuienesSomosRoute: typeof QuienesSomosRoute
+  RegistroRoute: typeof RegistroRoute
   TransparenciaRoute: typeof TransparenciaRoute
   VoluntariadoRoute: typeof VoluntariadoRoute
   DirectorioArtesanosIdRoute: typeof DirectorioArtesanosIdRoute
@@ -253,6 +266,13 @@ declare module '@tanstack/react-router' {
       path: '/transparencia'
       fullPath: '/transparencia'
       preLoaderRoute: typeof TransparenciaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/registro': {
+      id: '/registro'
+      path: '/registro'
+      fullPath: '/registro'
+      preLoaderRoute: typeof RegistroRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/quienes-somos': {
@@ -367,6 +387,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   NoticiasRoute: NoticiasRoute,
   QuienesSomosRoute: QuienesSomosRoute,
+  RegistroRoute: RegistroRoute,
   TransparenciaRoute: TransparenciaRoute,
   VoluntariadoRoute: VoluntariadoRoute,
   DirectorioArtesanosIdRoute: DirectorioArtesanosIdRoute,
