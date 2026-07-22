@@ -35,10 +35,13 @@ function RegisterPage() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const inFlightRef = useRef(false);
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (loading) return;
+    e.stopPropagation();
+    if (inFlightRef.current || loading) return;
+    inFlightRef.current = true;
     setLoading(true);
     try {
       const { error } = await supabase.auth.signUp({
@@ -60,6 +63,7 @@ function RegisterPage() {
       toast.error(msg);
     } finally {
       setLoading(false);
+      inFlightRef.current = false;
     }
   };
 
