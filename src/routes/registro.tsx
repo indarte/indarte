@@ -23,7 +23,9 @@ function translateError(msg: string) {
   if (m.includes("already registered") || m.includes("already been registered"))
     return "Ya existe una cuenta con ese correo.";
   if (m.includes("password")) return "La contraseña debe tener al menos 6 caracteres.";
-  return msg;
+  if (m.includes("email not confirmed") || m.includes("confirmed"))
+    return "Debes confirmar tu correo antes de iniciar sesión.";
+  return "No pudimos procesar tu registro. Por favor, intenta de nuevo en unos minutos.";
 }
 
 function RegisterPage() {
