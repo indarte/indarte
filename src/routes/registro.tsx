@@ -25,6 +25,8 @@ function translateError(msg: string) {
   if (m.includes("password")) return "La contraseña debe tener al menos 6 caracteres.";
   if (m.includes("email not confirmed") || m.includes("confirmed"))
     return "Debes confirmar tu correo antes de iniciar sesión.";
+  if (m.includes("rate limit") || m.includes("too many requests"))
+    return "Has enviado demasiadas solicitudes. Espera un momento e intenta de nuevo.";
   return "No pudimos procesar tu registro. Por favor, intenta de nuevo en unos minutos.";
 }
 
@@ -37,12 +39,16 @@ function RegisterPage() {
   const [password, setPassword] = useState("");
   const inFlightRef = useRef(false);
 
-  const handleSignup = async (e: React.FormEvent) => {
+  const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
+    // Bloquear el envío nativo del formulario inmediatamente
     e.preventDefault();
     e.stopPropagation();
-    if (inFlightRef.current || loading) return;
+
+    // Evitar envíos múltiples incluso si React aún no ha actualizado el estado
+    if (inFlightRef.current) return;
     inFlightRef.current = true;
     setLoading(true);
+
     try {
       const { error } = await supabase.auth.signUp({
         email,
@@ -52,10 +58,12 @@ function RegisterPage() {
           data: { full_name: fullName, role: "estudiante" },
         },
       });
+
       if (error) {
         toast.error(translateError(error.message));
         return;
       }
+
       toast.success("Cuenta creada. Revisa tu correo para confirmarla.");
       setSent(true);
     } catch (err) {
