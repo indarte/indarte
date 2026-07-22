@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import logoAsset from "@/assets/indarte-logo.jpeg.asset.json";
 
 const nav = [
   { to: "/", label: "Inicio" },
