@@ -8,7 +8,7 @@ export const Route = createFileRoute("/quienes-somos")({
       {
         name: "description",
         content:
-          "Conoce la historia, misión, visión y equipo del Instituto Nacional de Arte de República Dominicana.",
+          "Conoce la historia, misión, visión y equipo del Instituto Nacional para el Desarrollo del Arte y la Educación, INC (INDARTE) de República Dominicana.",
       },
       { property: "og:title", content: "Quiénes somos — INDARTE" },
       {
