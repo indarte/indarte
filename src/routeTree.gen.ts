@@ -23,6 +23,7 @@ import { Route as AulaVirtualRouteImport } from './routes/aula-virtual'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as EjesIndexRouteImport } from './routes/ejes.index'
 import { Route as EjesEjeRouteImport } from './routes/ejes.$eje'
+import { Route as DirectorioArtesanosIdRouteImport } from './routes/directorio-artesanos.$id'
 
 const VoluntariadoRoute = VoluntariadoRouteImport.update({
   id: '/voluntariado',
@@ -94,6 +95,11 @@ const EjesEjeRoute = EjesEjeRouteImport.update({
   path: '/ejes/$eje',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DirectorioArtesanosIdRoute = DirectorioArtesanosIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => DirectorioArtesanosRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -102,12 +108,13 @@ export interface FileRoutesByFullPath {
   '/biblioteca': typeof BibliotecaRoute
   '/contacto': typeof ContactoRoute
   '/cursos': typeof CursosRoute
-  '/directorio-artesanos': typeof DirectorioArtesanosRoute
+  '/directorio-artesanos': typeof DirectorioArtesanosRouteWithChildren
   '/dona': typeof DonaRoute
   '/noticias': typeof NoticiasRoute
   '/quienes-somos': typeof QuienesSomosRoute
   '/transparencia': typeof TransparenciaRoute
   '/voluntariado': typeof VoluntariadoRoute
+  '/directorio-artesanos/$id': typeof DirectorioArtesanosIdRoute
   '/ejes/$eje': typeof EjesEjeRoute
   '/ejes/': typeof EjesIndexRoute
 }
@@ -118,12 +125,13 @@ export interface FileRoutesByTo {
   '/biblioteca': typeof BibliotecaRoute
   '/contacto': typeof ContactoRoute
   '/cursos': typeof CursosRoute
-  '/directorio-artesanos': typeof DirectorioArtesanosRoute
+  '/directorio-artesanos': typeof DirectorioArtesanosRouteWithChildren
   '/dona': typeof DonaRoute
   '/noticias': typeof NoticiasRoute
   '/quienes-somos': typeof QuienesSomosRoute
   '/transparencia': typeof TransparenciaRoute
   '/voluntariado': typeof VoluntariadoRoute
+  '/directorio-artesanos/$id': typeof DirectorioArtesanosIdRoute
   '/ejes/$eje': typeof EjesEjeRoute
   '/ejes': typeof EjesIndexRoute
 }
@@ -135,12 +143,13 @@ export interface FileRoutesById {
   '/biblioteca': typeof BibliotecaRoute
   '/contacto': typeof ContactoRoute
   '/cursos': typeof CursosRoute
-  '/directorio-artesanos': typeof DirectorioArtesanosRoute
+  '/directorio-artesanos': typeof DirectorioArtesanosRouteWithChildren
   '/dona': typeof DonaRoute
   '/noticias': typeof NoticiasRoute
   '/quienes-somos': typeof QuienesSomosRoute
   '/transparencia': typeof TransparenciaRoute
   '/voluntariado': typeof VoluntariadoRoute
+  '/directorio-artesanos/$id': typeof DirectorioArtesanosIdRoute
   '/ejes/$eje': typeof EjesEjeRoute
   '/ejes/': typeof EjesIndexRoute
 }
@@ -159,6 +168,7 @@ export interface FileRouteTypes {
     | '/quienes-somos'
     | '/transparencia'
     | '/voluntariado'
+    | '/directorio-artesanos/$id'
     | '/ejes/$eje'
     | '/ejes/'
   fileRoutesByTo: FileRoutesByTo
@@ -175,6 +185,7 @@ export interface FileRouteTypes {
     | '/quienes-somos'
     | '/transparencia'
     | '/voluntariado'
+    | '/directorio-artesanos/$id'
     | '/ejes/$eje'
     | '/ejes'
   id:
@@ -191,6 +202,7 @@ export interface FileRouteTypes {
     | '/quienes-somos'
     | '/transparencia'
     | '/voluntariado'
+    | '/directorio-artesanos/$id'
     | '/ejes/$eje'
     | '/ejes/'
   fileRoutesById: FileRoutesById
@@ -202,7 +214,7 @@ export interface RootRouteChildren {
   BibliotecaRoute: typeof BibliotecaRoute
   ContactoRoute: typeof ContactoRoute
   CursosRoute: typeof CursosRoute
-  DirectorioArtesanosRoute: typeof DirectorioArtesanosRoute
+  DirectorioArtesanosRoute: typeof DirectorioArtesanosRouteWithChildren
   DonaRoute: typeof DonaRoute
   NoticiasRoute: typeof NoticiasRoute
   QuienesSomosRoute: typeof QuienesSomosRoute
@@ -312,8 +324,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EjesEjeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/directorio-artesanos/$id': {
+      id: '/directorio-artesanos/$id'
+      path: '/$id'
+      fullPath: '/directorio-artesanos/$id'
+      preLoaderRoute: typeof DirectorioArtesanosIdRouteImport
+      parentRoute: typeof DirectorioArtesanosRoute
+    }
   }
 }
+
+interface DirectorioArtesanosRouteChildren {
+  DirectorioArtesanosIdRoute: typeof DirectorioArtesanosIdRoute
+}
+
+const DirectorioArtesanosRouteChildren: DirectorioArtesanosRouteChildren = {
+  DirectorioArtesanosIdRoute: DirectorioArtesanosIdRoute,
+}
+
+const DirectorioArtesanosRouteWithChildren =
+  DirectorioArtesanosRoute._addFileChildren(DirectorioArtesanosRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -322,7 +352,7 @@ const rootRouteChildren: RootRouteChildren = {
   BibliotecaRoute: BibliotecaRoute,
   ContactoRoute: ContactoRoute,
   CursosRoute: CursosRoute,
-  DirectorioArtesanosRoute: DirectorioArtesanosRoute,
+  DirectorioArtesanosRoute: DirectorioArtesanosRouteWithChildren,
   DonaRoute: DonaRoute,
   NoticiasRoute: NoticiasRoute,
   QuienesSomosRoute: QuienesSomosRoute,
