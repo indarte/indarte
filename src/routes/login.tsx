@@ -93,13 +93,13 @@ function LoginPage() {
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
             <Label htmlFor="email">Correo</Label>
-            <Input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+            <Input id="email" type="email" required disabled={loading} value={email} onChange={(e) => setEmail(e.target.value)} />
           </div>
           <div>
             <Label htmlFor="password">Contraseña</Label>
-            <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
+            <Input id="password" type="password" required disabled={loading} value={password} onChange={(e) => setPassword(e.target.value)} />
           </div>
-          <Button type="submit" className="w-full" disabled={loading}>
+          <Button type="submit" className="w-full" disabled={loading} aria-busy={loading}>
             {loading ? "Ingresando…" : "Ingresar"}
           </Button>
         </form>
