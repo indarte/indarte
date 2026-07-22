@@ -60,7 +60,163 @@ function AulaVirtual() {
     );
   }
 
+  if (role === "docente") {
+    return <DocenteDashboard userId={user!.id} />;
+  }
+
   return <StudentDashboard userId={user!.id} />;
+}
+
+function DocenteDashboard({ userId }: { userId: string }) {
+  const cursosQ = useQuery({
+    queryKey: ["av-doc-cursos", userId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("curso_docentes")
+        .select("curso:cursos(id, nombre, fecha_inicio, fecha_fin, eje:ejes(nombre, slug))")
+        .eq("docente_id", userId);
+      if (error) throw error;
+      return (data ?? []).map((r: any) => r.curso).filter(Boolean);
+    },
+  });
+
+  const cursos = cursosQ.data ?? [];
+  const cursoIds = cursos.map((c: any) => c.id);
+
+  const estudiantesQ = useQuery({
+    queryKey: ["av-doc-estudiantes", cursoIds.join(",")],
+    enabled: cursoIds.length > 0,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("inscripciones")
+        .select("id, curso_id, estudiante:profiles(full_name, email)")
+        .in("curso_id", cursoIds)
+        .eq("estado", "confirmada");
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const clasesQ = useQuery({
+    queryKey: ["av-doc-clases", userId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("clases")
+        .select("id, titulo, fecha, link_videoconferencia, curso:cursos(nombre)")
+        .eq("docente_id", userId)
+        .gte("fecha", new Date().toISOString())
+        .order("fecha", { ascending: true });
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const clases = clasesQ.data ?? [];
+  const estudiantes = estudiantesQ.data ?? [];
+  const porCurso = estudiantes.reduce((acc: Record<string, any[]>, e: any) => {
+    (acc[e.curso_id] ||= []).push(e);
+    return acc;
+  }, {});
+
+  const totalEst = estudiantes.length;
+  const sinCursos = !cursosQ.isLoading && cursos.length === 0;
+
+  return (
+    <div>
+      <PageHero
+        eyebrow="Panel docente"
+        title="Aula Virtual"
+        description="Gestiona tus cursos, estudiantes y clases programadas."
+      />
+      <section className="mx-auto max-w-6xl space-y-10 px-4 py-14 lg:px-8">
+        <div className="grid gap-6 md:grid-cols-3">
+          <StatCard icon={<PlayCircle className="h-6 w-6" />} title="Cursos asignados" value={String(cursos.length)} />
+          <StatCard icon={<GraduationCap className="h-6 w-6" />} title="Estudiantes inscritos" value={String(totalEst)} />
+          <StatCard icon={<Calendar className="h-6 w-6" />} title="Próximas clases" value={String(clases.length)} />
+        </div>
+
+        {sinCursos ? (
+          <div className="rounded-2xl border border-border bg-card p-10 text-center">
+            <GraduationCap className="mx-auto h-10 w-10 text-primary" />
+            <h2 className="mt-4 font-display text-2xl font-semibold">Aún no tienes cursos asignados</h2>
+            <p className="mt-2 text-muted-foreground">
+              Cuando el coordinador te asigne un curso, aparecerá aquí junto con tus estudiantes y clases.
+            </p>
+          </div>
+        ) : (
+          <>
+            <Section title="Mis cursos asignados" icon={<PlayCircle className="h-5 w-5" />}>
+              <div className="grid gap-4 md:grid-cols-2">
+                {cursos.map((c: any) => (
+                  <div key={c.id} className="rounded-xl border border-border bg-card p-5">
+                    <div className="text-xs uppercase tracking-wide text-primary">{c.eje?.nombre ?? "—"}</div>
+                    <h3 className="mt-1 font-display text-lg font-semibold">{c.nombre}</h3>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      {formatDate(c.fecha_inicio)} — {formatDate(c.fecha_fin)}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </Section>
+
+            <Section title="Estudiantes por curso" icon={<GraduationCap className="h-5 w-5" />}>
+              <div className="space-y-4">
+                {cursos.map((c: any) => {
+                  const items = porCurso[c.id] ?? [];
+                  return (
+                    <div key={c.id} className="rounded-xl border border-border bg-card p-5">
+                      <div className="flex items-center justify-between">
+                        <h3 className="font-display text-lg font-semibold">{c.nombre}</h3>
+                        <span className="text-sm text-muted-foreground">{items.length} estudiante{items.length === 1 ? "" : "s"}</span>
+                      </div>
+                      {items.length === 0 ? (
+                        <p className="mt-3 text-sm text-muted-foreground">Sin estudiantes inscritos aún.</p>
+                      ) : (
+                        <ul className="mt-3 divide-y divide-border">
+                          {items.map((i: any) => (
+                            <li key={i.id} className="flex items-center justify-between py-2 text-sm">
+                              <span>{i.estudiante?.full_name || "—"}</span>
+                              <span className="text-muted-foreground">{i.estudiante?.email}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </Section>
+
+            <Section title="Mis próximas clases" icon={<Calendar className="h-5 w-5" />}>
+              {clases.length === 0 ? (
+                <EmptyRow text="No tienes clases próximas programadas." />
+              ) : (
+                <ul className="divide-y divide-border rounded-xl border border-border bg-card">
+                  {clases.map((c: any) => (
+                    <li key={c.id} className="flex flex-col gap-2 p-5 sm:flex-row sm:items-center sm:justify-between">
+                      <div>
+                        <div className="font-medium">{c.titulo}</div>
+                        <div className="text-sm text-muted-foreground">
+                          {c.curso?.nombre} · {formatDateTime(c.fecha)}
+                        </div>
+                      </div>
+                      {c.link_videoconferencia ? (
+                        <Button asChild size="sm" variant="outline">
+                          <a href={c.link_videoconferencia} target="_blank" rel="noreferrer">
+                            <Video className="mr-2 h-4 w-4" /> Unirse
+                          </a>
+                        </Button>
+                      ) : null}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </Section>
+          </>
+        )}
+      </section>
+    </div>
+  );
 }
 
 function StudentDashboard({ userId }: { userId: string }) {
