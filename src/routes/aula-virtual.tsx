@@ -64,7 +64,225 @@ function AulaVirtual() {
     return <DocenteDashboard userId={user!.id} />;
   }
 
+  if (role === "supervisor_infotep") {
+    return <SupervisorDashboard />;
+  }
+
   return <StudentDashboard userId={user!.id} />;
+}
+
+function SupervisorDashboard() {
+  const cursosQ = useQuery({
+    queryKey: ["av-sup-cursos"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("cursos")
+        .select("id, nombre, fecha_inicio, fecha_fin, eje:ejes!inner(nombre, slug)")
+        .eq("eje.slug", "capacitacion-tecnica")
+        .order("fecha_inicio", { ascending: false });
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const cursos = cursosQ.data ?? [];
+  const cursoIds = cursos.map((c: any) => c.id);
+
+  const inscripcionesQ = useQuery({
+    queryKey: ["av-sup-inscripciones", cursoIds.join(",")],
+    enabled: cursoIds.length > 0,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("inscripciones")
+        .select("id, curso_id, estudiante:profiles(id, full_name, email)")
+        .in("curso_id", cursoIds)
+        .eq("estado", "confirmada");
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const asistenciaQ = useQuery({
+    queryKey: ["av-sup-asistencia", cursoIds.join(",")],
+    enabled: cursoIds.length > 0,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("asistencia")
+        .select("id, presente, clase:clases!inner(id, titulo, fecha, curso_id), estudiante:profiles(full_name)")
+        .in("clase.curso_id", cursoIds)
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const calificacionesQ = useQuery({
+    queryKey: ["av-sup-calificaciones", cursoIds.join(",")],
+    enabled: cursoIds.length > 0,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("calificaciones")
+        .select("id, concepto, nota, curso_id, curso:cursos(nombre), estudiante:profiles(full_name)")
+        .in("curso_id", cursoIds)
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const inscripciones = inscripcionesQ.data ?? [];
+  const asistencia = asistenciaQ.data ?? [];
+  const calificaciones = calificacionesQ.data ?? [];
+
+  const inscPorCurso = inscripciones.reduce((acc: Record<string, any[]>, i: any) => {
+    (acc[i.curso_id] ||= []).push(i);
+    return acc;
+  }, {});
+
+  const asistPorClase = asistencia.reduce((acc: Record<string, { clase: any; items: any[] }>, a: any) => {
+    if (!a.clase) return acc;
+    const k = a.clase.id;
+    if (!acc[k]) acc[k] = { clase: a.clase, items: [] };
+    acc[k].items.push(a);
+    return acc;
+  }, {});
+
+  const califPorCurso = calificaciones.reduce((acc: Record<string, { nombre: string; items: any[] }>, c: any) => {
+    const k = c.curso_id;
+    if (!acc[k]) acc[k] = { nombre: c.curso?.nombre ?? "—", items: [] };
+    acc[k].items.push(c);
+    return acc;
+  }, {});
+
+  const sinCursos = !cursosQ.isLoading && cursos.length === 0;
+
+  return (
+    <div>
+      <PageHero
+        eyebrow="Supervisión INFOTEP"
+        title="Aula Virtual"
+        description="Vista de auditoría para cursos de Capacitación Técnico Profesional."
+      >
+        <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
+          <Eye className="h-4 w-4" />
+          Modo supervisión — solo lectura
+        </div>
+      </PageHero>
+      <section className="mx-auto max-w-6xl space-y-10 px-4 py-14 lg:px-8">
+        <div className="grid gap-6 md:grid-cols-3">
+          <StatCard icon={<PlayCircle className="h-6 w-6" />} title="Cursos técnicos" value={String(cursos.length)} />
+          <StatCard icon={<GraduationCap className="h-6 w-6" />} title="Estudiantes inscritos" value={String(inscripciones.length)} />
+          <StatCard icon={<ClipboardList className="h-6 w-6" />} title="Registros de asistencia" value={String(asistencia.length)} />
+        </div>
+
+        {sinCursos ? (
+          <div className="rounded-2xl border border-border bg-card p-10 text-center">
+            <GraduationCap className="mx-auto h-10 w-10 text-primary" />
+            <h2 className="mt-4 font-display text-2xl font-semibold">No hay cursos técnicos registrados</h2>
+            <p className="mt-2 text-muted-foreground">
+              Cuando se creen cursos bajo el eje de Capacitación Técnico Profesional, aparecerán aquí.
+            </p>
+          </div>
+        ) : (
+          <>
+            <Section title="Cursos de Capacitación Técnico Profesional" icon={<PlayCircle className="h-5 w-5" />}>
+              <div className="grid gap-4 md:grid-cols-2">
+                {cursos.map((c: any) => (
+                  <div key={c.id} className="rounded-xl border border-border bg-card p-5">
+                    <div className="text-xs uppercase tracking-wide text-primary">{c.eje?.nombre ?? "—"}</div>
+                    <h3 className="mt-1 font-display text-lg font-semibold">{c.nombre}</h3>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      {formatDate(c.fecha_inicio)} — {formatDate(c.fecha_fin)}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </Section>
+
+            <Section title="Avance por curso" icon={<GraduationCap className="h-5 w-5" />}>
+              <div className="space-y-4">
+                {cursos.map((c: any) => {
+                  const items = inscPorCurso[c.id] ?? [];
+                  return (
+                    <div key={c.id} className="rounded-xl border border-border bg-card p-5">
+                      <div className="flex items-center justify-between">
+                        <h3 className="font-display text-lg font-semibold">{c.nombre}</h3>
+                        <span className="text-sm text-muted-foreground">
+                          {items.length} estudiante{items.length === 1 ? "" : "s"}
+                        </span>
+                      </div>
+                      {items.length === 0 ? (
+                        <p className="mt-3 text-sm text-muted-foreground">Sin estudiantes inscritos aún.</p>
+                      ) : (
+                        <ul className="mt-3 divide-y divide-border">
+                          {items.map((i: any) => (
+                            <li key={i.id} className="flex items-center justify-between py-2 text-sm">
+                              <span>{i.estudiante?.full_name || "—"}</span>
+                              <span className="text-muted-foreground">{i.estudiante?.email}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </Section>
+
+            <Section title="Asistencia por clase" icon={<ClipboardList className="h-5 w-5" />}>
+              {Object.keys(asistPorClase).length === 0 ? (
+                <EmptyRow text="Aún no hay registros de asistencia." />
+              ) : (
+                <div className="space-y-4">
+                  {Object.values(asistPorClase).map(({ clase, items }) => (
+                    <div key={clase.id} className="rounded-xl border border-border bg-card p-5">
+                      <div className="flex items-center justify-between">
+                        <h3 className="font-display text-lg font-semibold">{clase.titulo}</h3>
+                        <span className="text-sm text-muted-foreground">{formatDateTime(clase.fecha)}</span>
+                      </div>
+                      <ul className="mt-3 divide-y divide-border">
+                        {items.map((a: any) => (
+                          <li key={a.id} className="flex items-center justify-between py-2 text-sm">
+                            <span>{a.estudiante?.full_name || "—"}</span>
+                            <span className={a.presente ? "text-primary font-medium" : "text-muted-foreground"}>
+                              {a.presente ? "Presente" : "Ausente"}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </Section>
+
+            <Section title="Calificaciones" icon={<FileText className="h-5 w-5" />}>
+              {calificaciones.length === 0 ? (
+                <EmptyRow text="Aún no hay calificaciones registradas." />
+              ) : (
+                <div className="space-y-4">
+                  {Object.values(califPorCurso).map((grp) => (
+                    <div key={grp.nombre} className="rounded-xl border border-border bg-card p-5">
+                      <h3 className="font-display text-lg font-semibold">{grp.nombre}</h3>
+                      <ul className="mt-3 divide-y divide-border">
+                        {grp.items.map((c: any) => (
+                          <li key={c.id} className="grid grid-cols-3 items-center gap-2 py-2 text-sm">
+                            <span>{c.estudiante?.full_name || "—"}</span>
+                            <span className="text-muted-foreground">{c.concepto}</span>
+                            <span className="text-right font-semibold">{Number(c.nota).toFixed(2)}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </Section>
+          </>
+        )}
+      </section>
+    </div>
+  );
 }
 
 function DocenteDashboard({ userId }: { userId: string }) {
