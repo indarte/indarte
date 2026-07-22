@@ -36,7 +36,7 @@ const artesanosQuery = queryOptions({
   },
 });
 
-export const Route = createFileRoute("/directorio-artesanos")({
+export const Route = createFileRoute("/directorio-artesanos/")({
   head: () => ({
     meta: [
       { title: "Directorio de Artesanos — INDARTE" },
