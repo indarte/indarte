@@ -9,38 +9,288 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VoluntariadoRouteImport } from './routes/voluntariado'
+import { Route as TransparenciaRouteImport } from './routes/transparencia'
+import { Route as QuienesSomosRouteImport } from './routes/quienes-somos'
+import { Route as NoticiasRouteImport } from './routes/noticias'
+import { Route as DonaRouteImport } from './routes/dona'
+import { Route as DirectorioArtesanosRouteImport } from './routes/directorio-artesanos'
+import { Route as CursosRouteImport } from './routes/cursos'
+import { Route as ContactoRouteImport } from './routes/contacto'
+import { Route as BibliotecaRouteImport } from './routes/biblioteca'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AulaVirtualRouteImport } from './routes/aula-virtual'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as EjesIndexRouteImport } from './routes/ejes.index'
+import { Route as EjesEjeRouteImport } from './routes/ejes.$eje'
 
+const VoluntariadoRoute = VoluntariadoRouteImport.update({
+  id: '/voluntariado',
+  path: '/voluntariado',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TransparenciaRoute = TransparenciaRouteImport.update({
+  id: '/transparencia',
+  path: '/transparencia',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuienesSomosRoute = QuienesSomosRouteImport.update({
+  id: '/quienes-somos',
+  path: '/quienes-somos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NoticiasRoute = NoticiasRouteImport.update({
+  id: '/noticias',
+  path: '/noticias',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DonaRoute = DonaRouteImport.update({
+  id: '/dona',
+  path: '/dona',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DirectorioArtesanosRoute = DirectorioArtesanosRouteImport.update({
+  id: '/directorio-artesanos',
+  path: '/directorio-artesanos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CursosRoute = CursosRouteImport.update({
+  id: '/cursos',
+  path: '/cursos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactoRoute = ContactoRouteImport.update({
+  id: '/contacto',
+  path: '/contacto',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BibliotecaRoute = BibliotecaRouteImport.update({
+  id: '/biblioteca',
+  path: '/biblioteca',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AulaVirtualRoute = AulaVirtualRouteImport.update({
+  id: '/aula-virtual',
+  path: '/aula-virtual',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EjesIndexRoute = EjesIndexRouteImport.update({
+  id: '/ejes/',
+  path: '/ejes/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EjesEjeRoute = EjesEjeRouteImport.update({
+  id: '/ejes/$eje',
+  path: '/ejes/$eje',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/aula-virtual': typeof AulaVirtualRoute
+  '/auth': typeof AuthRoute
+  '/biblioteca': typeof BibliotecaRoute
+  '/contacto': typeof ContactoRoute
+  '/cursos': typeof CursosRoute
+  '/directorio-artesanos': typeof DirectorioArtesanosRoute
+  '/dona': typeof DonaRoute
+  '/noticias': typeof NoticiasRoute
+  '/quienes-somos': typeof QuienesSomosRoute
+  '/transparencia': typeof TransparenciaRoute
+  '/voluntariado': typeof VoluntariadoRoute
+  '/ejes/$eje': typeof EjesEjeRoute
+  '/ejes/': typeof EjesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/aula-virtual': typeof AulaVirtualRoute
+  '/auth': typeof AuthRoute
+  '/biblioteca': typeof BibliotecaRoute
+  '/contacto': typeof ContactoRoute
+  '/cursos': typeof CursosRoute
+  '/directorio-artesanos': typeof DirectorioArtesanosRoute
+  '/dona': typeof DonaRoute
+  '/noticias': typeof NoticiasRoute
+  '/quienes-somos': typeof QuienesSomosRoute
+  '/transparencia': typeof TransparenciaRoute
+  '/voluntariado': typeof VoluntariadoRoute
+  '/ejes/$eje': typeof EjesEjeRoute
+  '/ejes': typeof EjesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/aula-virtual': typeof AulaVirtualRoute
+  '/auth': typeof AuthRoute
+  '/biblioteca': typeof BibliotecaRoute
+  '/contacto': typeof ContactoRoute
+  '/cursos': typeof CursosRoute
+  '/directorio-artesanos': typeof DirectorioArtesanosRoute
+  '/dona': typeof DonaRoute
+  '/noticias': typeof NoticiasRoute
+  '/quienes-somos': typeof QuienesSomosRoute
+  '/transparencia': typeof TransparenciaRoute
+  '/voluntariado': typeof VoluntariadoRoute
+  '/ejes/$eje': typeof EjesEjeRoute
+  '/ejes/': typeof EjesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/aula-virtual'
+    | '/auth'
+    | '/biblioteca'
+    | '/contacto'
+    | '/cursos'
+    | '/directorio-artesanos'
+    | '/dona'
+    | '/noticias'
+    | '/quienes-somos'
+    | '/transparencia'
+    | '/voluntariado'
+    | '/ejes/$eje'
+    | '/ejes/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/aula-virtual'
+    | '/auth'
+    | '/biblioteca'
+    | '/contacto'
+    | '/cursos'
+    | '/directorio-artesanos'
+    | '/dona'
+    | '/noticias'
+    | '/quienes-somos'
+    | '/transparencia'
+    | '/voluntariado'
+    | '/ejes/$eje'
+    | '/ejes'
+  id:
+    | '__root__'
+    | '/'
+    | '/aula-virtual'
+    | '/auth'
+    | '/biblioteca'
+    | '/contacto'
+    | '/cursos'
+    | '/directorio-artesanos'
+    | '/dona'
+    | '/noticias'
+    | '/quienes-somos'
+    | '/transparencia'
+    | '/voluntariado'
+    | '/ejes/$eje'
+    | '/ejes/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AulaVirtualRoute: typeof AulaVirtualRoute
+  AuthRoute: typeof AuthRoute
+  BibliotecaRoute: typeof BibliotecaRoute
+  ContactoRoute: typeof ContactoRoute
+  CursosRoute: typeof CursosRoute
+  DirectorioArtesanosRoute: typeof DirectorioArtesanosRoute
+  DonaRoute: typeof DonaRoute
+  NoticiasRoute: typeof NoticiasRoute
+  QuienesSomosRoute: typeof QuienesSomosRoute
+  TransparenciaRoute: typeof TransparenciaRoute
+  VoluntariadoRoute: typeof VoluntariadoRoute
+  EjesEjeRoute: typeof EjesEjeRoute
+  EjesIndexRoute: typeof EjesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/voluntariado': {
+      id: '/voluntariado'
+      path: '/voluntariado'
+      fullPath: '/voluntariado'
+      preLoaderRoute: typeof VoluntariadoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/transparencia': {
+      id: '/transparencia'
+      path: '/transparencia'
+      fullPath: '/transparencia'
+      preLoaderRoute: typeof TransparenciaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quienes-somos': {
+      id: '/quienes-somos'
+      path: '/quienes-somos'
+      fullPath: '/quienes-somos'
+      preLoaderRoute: typeof QuienesSomosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/noticias': {
+      id: '/noticias'
+      path: '/noticias'
+      fullPath: '/noticias'
+      preLoaderRoute: typeof NoticiasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dona': {
+      id: '/dona'
+      path: '/dona'
+      fullPath: '/dona'
+      preLoaderRoute: typeof DonaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/directorio-artesanos': {
+      id: '/directorio-artesanos'
+      path: '/directorio-artesanos'
+      fullPath: '/directorio-artesanos'
+      preLoaderRoute: typeof DirectorioArtesanosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cursos': {
+      id: '/cursos'
+      path: '/cursos'
+      fullPath: '/cursos'
+      preLoaderRoute: typeof CursosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contacto': {
+      id: '/contacto'
+      path: '/contacto'
+      fullPath: '/contacto'
+      preLoaderRoute: typeof ContactoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/biblioteca': {
+      id: '/biblioteca'
+      path: '/biblioteca'
+      fullPath: '/biblioteca'
+      preLoaderRoute: typeof BibliotecaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/aula-virtual': {
+      id: '/aula-virtual'
+      path: '/aula-virtual'
+      fullPath: '/aula-virtual'
+      preLoaderRoute: typeof AulaVirtualRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +298,38 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ejes/': {
+      id: '/ejes/'
+      path: '/ejes'
+      fullPath: '/ejes/'
+      preLoaderRoute: typeof EjesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ejes/$eje': {
+      id: '/ejes/$eje'
+      path: '/ejes/$eje'
+      fullPath: '/ejes/$eje'
+      preLoaderRoute: typeof EjesEjeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AulaVirtualRoute: AulaVirtualRoute,
+  AuthRoute: AuthRoute,
+  BibliotecaRoute: BibliotecaRoute,
+  ContactoRoute: ContactoRoute,
+  CursosRoute: CursosRoute,
+  DirectorioArtesanosRoute: DirectorioArtesanosRoute,
+  DonaRoute: DonaRoute,
+  NoticiasRoute: NoticiasRoute,
+  QuienesSomosRoute: QuienesSomosRoute,
+  TransparenciaRoute: TransparenciaRoute,
+  VoluntariadoRoute: VoluntariadoRoute,
+  EjesEjeRoute: EjesEjeRoute,
+  EjesIndexRoute: EjesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
