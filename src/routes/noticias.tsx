@@ -9,7 +9,7 @@ export const Route = createFileRoute("/noticias")({
       {
         name: "description",
         content:
-          "Últimas noticias, convocatorias y eventos del Instituto Nacional de Arte de República Dominicana.",
+          "Últimas noticias, convocatorias y eventos del Instituto Nacional para el Desarrollo del Arte y la Educación, INC (INDARTE) de República Dominicana.",
       },
       { property: "og:title", content: "Noticias y eventos — INDARTE" },
       {

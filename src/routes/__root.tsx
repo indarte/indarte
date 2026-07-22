@@ -85,14 +85,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "INDARTE — Instituto Nacional de Arte" },
+      { title: "INDARTE — Instituto Nacional para el Desarrollo del Arte y la Educación, INC" },
       {
         name: "description",
         content:
           "Portal institucional del INDARTE: educación artística, primera infancia, capacitación técnico profesional y desarrollo artesanal en República Dominicana.",
       },
       { name: "author", content: "INDARTE" },
-      { property: "og:title", content: "INDARTE — Instituto Nacional de Arte" },
+      { property: "og:title", content: "INDARTE — Instituto Nacional para el Desarrollo del Arte y la Educación, INC" },
       {
         property: "og:description",
         content:

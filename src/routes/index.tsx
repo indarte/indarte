@@ -10,7 +10,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "El Instituto Nacional de Arte promueve la formación artística, la primera infancia, la capacitación técnica y el desarrollo artesanal en República Dominicana.",
+          "El Instituto Nacional para el Desarrollo del Arte y la Educación, INC (INDARTE) promueve la formación artística, la primera infancia, la capacitación técnica y el desarrollo artesanal en República Dominicana.",
       },
       { property: "og:title", content: "INDARTE — Portal Institucional" },
       {
@@ -31,7 +31,7 @@ function Home() {
         <div className="mx-auto grid max-w-7xl gap-10 px-4 py-20 lg:grid-cols-2 lg:gap-16 lg:px-8 lg:py-28">
           <div>
             <div className="mb-4 text-xs font-medium uppercase tracking-widest text-primary">
-              Instituto Nacional de Arte · República Dominicana
+              Instituto Nacional para el Desarrollo del Arte y la Educación, INC · República Dominicana
             </div>
             <h1 className="font-display text-4xl font-semibold leading-[1.05] text-foreground md:text-6xl">
               El arte que nos <span className="text-primary">forma</span> como pueblo.

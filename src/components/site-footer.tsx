@@ -12,7 +12,7 @@ export function SiteFooter() {
             <div className="font-display text-lg font-semibold">INDARTE</div>
           </div>
           <p className="mt-4 text-sm text-muted-foreground">
-            Instituto Nacional de Arte. Promoviendo la educación artística, la artesanía y la
+            Instituto Nacional para el Desarrollo del Arte y la Educación, INC. Promoviendo la educación artística, la artesanía y la
             cultura en la República Dominicana.
           </p>
         </div>
