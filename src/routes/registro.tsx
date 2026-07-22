@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -35,10 +35,13 @@ function RegisterPage() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const inFlightRef = useRef(false);
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (loading) return;
+    e.stopPropagation();
+    if (inFlightRef.current || loading) return;
+    inFlightRef.current = true;
     setLoading(true);
     try {
       const { error } = await supabase.auth.signUp({
@@ -60,6 +63,7 @@ function RegisterPage() {
       toast.error(msg);
     } finally {
       setLoading(false);
+      inFlightRef.current = false;
     }
   };
 
@@ -88,11 +92,11 @@ function RegisterPage() {
         <form onSubmit={handleSignup} className="space-y-4">
           <div>
             <Label htmlFor="name">Nombre completo</Label>
-            <Input id="name" required value={fullName} onChange={(e) => setFullName(e.target.value)} />
+            <Input id="name" required disabled={loading} value={fullName} onChange={(e) => setFullName(e.target.value)} />
           </div>
           <div>
             <Label htmlFor="email">Correo</Label>
-            <Input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+            <Input id="email" type="email" required disabled={loading} value={email} onChange={(e) => setEmail(e.target.value)} />
           </div>
           <div>
             <Label htmlFor="password">Contraseña</Label>
@@ -101,11 +105,12 @@ function RegisterPage() {
               type="password"
               required
               minLength={6}
+              disabled={loading}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <Button type="submit" className="w-full" disabled={loading}>
+          <Button type="submit" className="w-full" disabled={loading} aria-busy={loading}>
             {loading ? "Creando…" : "Crear cuenta"}
           </Button>
         </form>
