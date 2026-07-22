@@ -1,8 +1,9 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LogOut, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import logoAsset from "@/assets/indarte-logo.jpeg.asset.json";
+import { useAuth } from "@/hooks/use-auth";
 
 const nav = [
   { to: "/", label: "Inicio" },
@@ -19,16 +20,20 @@ const nav = [
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const { session, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await signOut();
+    setOpen(false);
+    navigate({ to: "/", replace: true });
+  };
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 lg:px-8">
         <Link to="/" className="flex min-w-0 items-center gap-3">
-          <img
-            src={logoAsset.url}
-            alt="INDARTE"
-            className="h-12 w-12 shrink-0 rounded-full object-contain"
-          />
+          <img src={logoAsset.url} alt="INDARTE" className="h-12 w-12 shrink-0 rounded-full object-contain" />
           <div className="min-w-0 leading-tight">
             <div className="font-display text-lg font-semibold text-foreground">INDARTE</div>
             <div className="truncate text-[11px] uppercase tracking-widest text-muted-foreground">
@@ -52,6 +57,17 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
+          {session ? (
+            <Button size="sm" variant="outline" onClick={handleSignOut} className="hidden sm:inline-flex">
+              <LogOut className="mr-1 h-4 w-4" /> Cerrar sesión
+            </Button>
+          ) : (
+            <Button asChild size="sm" variant="outline" className="hidden sm:inline-flex">
+              <Link to="/login">
+                <LogIn className="mr-1 h-4 w-4" /> Ingresar
+              </Link>
+            </Button>
+          )}
           <Button asChild size="sm" className="hidden sm:inline-flex">
             <Link to="/dona">Dona ahora</Link>
           </Button>
@@ -80,6 +96,22 @@ export function SiteHeader() {
                 {n.label}
               </Link>
             ))}
+            {session ? (
+              <button
+                onClick={handleSignOut}
+                className="mt-2 rounded-md border border-border px-3 py-2.5 text-left text-sm text-foreground/80 hover:bg-secondary"
+              >
+                Cerrar sesión
+              </button>
+            ) : (
+              <Link
+                to="/login"
+                onClick={() => setOpen(false)}
+                className="mt-2 rounded-md border border-border px-3 py-2.5 text-sm text-foreground/80 hover:bg-secondary"
+              >
+                Ingresar
+              </Link>
+            )}
             <Link
               to="/dona"
               onClick={() => setOpen(false)}
