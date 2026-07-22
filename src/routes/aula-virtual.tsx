@@ -108,7 +108,7 @@ function SupervisorDashboard() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("asistencia")
-        .select("id, presente, clase:clases!inner(id, titulo, fecha, curso_id), estudiante:profiles(full_name)")
+        .select("id, presente, clase:clases!inner(id, titulo, fecha, curso_id), estudiante:profiles!asistencia_estudiante_id_fkey(full_name)")
         .in("clase.curso_id", cursoIds)
         .order("created_at", { ascending: false });
       if (error) throw error;
@@ -122,7 +122,7 @@ function SupervisorDashboard() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("calificaciones")
-        .select("id, concepto, nota, curso_id, curso:cursos(nombre), estudiante:profiles(full_name)")
+        .select("id, concepto, nota, curso_id, curso:cursos(nombre), estudiante:profiles!calificaciones_estudiante_id_fkey(full_name)")
         .in("curso_id", cursoIds)
         .order("created_at", { ascending: false });
       if (error) throw error;
