@@ -624,6 +624,8 @@ function DocenteDashboard({ userId }: { userId: string }) {
                 </ul>
               )}
             </Section>
+
+            <TareasDocenteSection cursos={cursos} userId={userId} />
           </>
         )}
       </section>
