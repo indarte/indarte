@@ -2,7 +2,7 @@ import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { PageHero } from "@/components/page-hero";
 import { Button } from "@/components/ui/button";
-import { GraduationCap, PlayCircle, FileText, Calendar, Video, Download, Award, Eye, ClipboardList } from "lucide-react";
+import { GraduationCap, PlayCircle, FileText, Calendar, Video, Download, Award, Eye, ClipboardList, Layers, BookOpen } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useQuery } from "@tanstack/react-query";
 
@@ -68,7 +68,199 @@ function AulaVirtual() {
     return <SupervisorDashboard />;
   }
 
+  if (role === "coordinador_eje") {
+    return <CoordinadorDashboard userId={user!.id} />;
+  }
+
   return <StudentDashboard userId={user!.id} />;
+}
+
+function CoordinadorDashboard({ userId }: { userId: string }) {
+  const ejesQ = useQuery({
+    queryKey: ["av-coord-ejes", userId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("coordinadores_eje")
+        .select("eje:ejes(id, nombre, slug)")
+        .eq("profile_id", userId);
+      if (error) throw error;
+      return (data ?? []).map((r: any) => r.eje).filter(Boolean);
+    },
+  });
+
+  const ejes = ejesQ.data ?? [];
+  const ejeIds = ejes.map((e: any) => e.id);
+
+  const cursosQ = useQuery({
+    queryKey: ["av-coord-cursos", ejeIds.join(",")],
+    enabled: ejeIds.length > 0,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("cursos")
+        .select("id, nombre, fecha_inicio, fecha_fin, eje_id, eje:ejes(nombre)")
+        .in("eje_id", ejeIds)
+        .order("fecha_inicio", { ascending: false });
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const cursos = cursosQ.data ?? [];
+  const cursoIds = cursos.map((c: any) => c.id);
+
+  const docentesQ = useQuery({
+    queryKey: ["av-coord-docentes", cursoIds.join(",")],
+    enabled: cursoIds.length > 0,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("curso_docentes")
+        .select("curso_id, docente:profiles!curso_docentes_docente_id_fkey(full_name)")
+        .in("curso_id", cursoIds);
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const inscripcionesQ = useQuery({
+    queryKey: ["av-coord-inscripciones", cursoIds.join(",")],
+    enabled: cursoIds.length > 0,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("inscripciones")
+        .select("id, curso_id")
+        .in("curso_id", cursoIds)
+        .eq("estado", "confirmada");
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const recursosQ = useQuery({
+    queryKey: ["av-coord-recursos", ejeIds.join(",")],
+    enabled: ejeIds.length > 0,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("recursos_biblioteca")
+        .select("id, titulo, tipo, nivel, eje_id, archivo_url, created_at")
+        .in("eje_id", ejeIds)
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const docentes = docentesQ.data ?? [];
+  const inscripciones = inscripcionesQ.data ?? [];
+  const recursos = recursosQ.data ?? [];
+
+  const docentesPorCurso = docentes.reduce((acc: Record<string, string[]>, d: any) => {
+    const n = d.docente?.full_name;
+    if (!n) return acc;
+    (acc[d.curso_id] ||= []).push(n);
+    return acc;
+  }, {});
+
+  const inscPorCurso = inscripciones.reduce((acc: Record<string, number>, i: any) => {
+    acc[i.curso_id] = (acc[i.curso_id] ?? 0) + 1;
+    return acc;
+  }, {});
+
+  const ejeNombre = (id: string | null) => ejes.find((e: any) => e.id === id)?.nombre ?? "—";
+  const sinEjes = !ejesQ.isLoading && ejes.length === 0;
+
+  return (
+    <div>
+      <PageHero
+        eyebrow="Coordinación de eje"
+        title="Aula Virtual"
+        description="Gestiona los cursos, docentes y recursos de tu(s) eje(s) de trabajo."
+      />
+      <section className="mx-auto max-w-6xl space-y-10 px-4 py-14 lg:px-8">
+        <div className="grid gap-6 md:grid-cols-3">
+          <StatCard icon={<Layers className="h-6 w-6" />} title="Ejes asignados" value={String(ejes.length)} />
+          <StatCard icon={<PlayCircle className="h-6 w-6" />} title="Cursos del eje" value={String(cursos.length)} />
+          <StatCard icon={<GraduationCap className="h-6 w-6" />} title="Estudiantes inscritos" value={String(inscripciones.length)} />
+        </div>
+
+        {sinEjes ? (
+          <div className="rounded-2xl border border-border bg-card p-10 text-center">
+            <Layers className="mx-auto h-10 w-10 text-primary" />
+            <h2 className="mt-4 font-display text-2xl font-semibold">Aún no tienes ejes asignados</h2>
+            <p className="mt-2 text-muted-foreground">
+              Contacta al administrador para que te asigne uno o más ejes de trabajo.
+            </p>
+          </div>
+        ) : (
+          <>
+            <Section title="Mi(s) eje(s)" icon={<Layers className="h-5 w-5" />}>
+              <div className="flex flex-wrap gap-2">
+                {ejes.map((e: any) => (
+                  <span key={e.id} className="rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
+                    {e.nombre}
+                  </span>
+                ))}
+              </div>
+            </Section>
+
+            <Section title="Cursos del eje" icon={<PlayCircle className="h-5 w-5" />}>
+              {cursos.length === 0 ? (
+                <EmptyRow text="Aún no hay cursos registrados en tu(s) eje(s)." />
+              ) : (
+                <div className="grid gap-4 md:grid-cols-2">
+                  {cursos.map((c: any) => {
+                    const docs = docentesPorCurso[c.id] ?? [];
+                    return (
+                      <div key={c.id} className="rounded-xl border border-border bg-card p-5">
+                        <div className="text-xs uppercase tracking-wide text-primary">{c.eje?.nombre ?? ejeNombre(c.eje_id)}</div>
+                        <h3 className="mt-1 font-display text-lg font-semibold">{c.nombre}</h3>
+                        <p className="mt-2 text-sm text-muted-foreground">
+                          {formatDate(c.fecha_inicio)} — {formatDate(c.fecha_fin)}
+                        </p>
+                        <div className="mt-3 text-sm">
+                          <span className="text-muted-foreground">Docente(s): </span>
+                          <span className="font-medium">{docs.length > 0 ? docs.join(", ") : "Sin asignar"}</span>
+                        </div>
+                        <div className="mt-1 text-sm">
+                          <span className="text-muted-foreground">Inscritos: </span>
+                          <span className="font-medium">{inscPorCurso[c.id] ?? 0}</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </Section>
+
+            <Section title="Recursos de biblioteca de mi eje" icon={<BookOpen className="h-5 w-5" />}>
+              {recursos.length === 0 ? (
+                <EmptyRow text="Aún no hay recursos publicados en tu(s) eje(s)." />
+              ) : (
+                <ul className="divide-y divide-border rounded-xl border border-border bg-card">
+                  {recursos.map((r: any) => (
+                    <li key={r.id} className="flex flex-col gap-2 p-5 sm:flex-row sm:items-center sm:justify-between">
+                      <div>
+                        <div className="font-medium">{r.titulo}</div>
+                        <div className="text-sm text-muted-foreground">
+                          {ejeNombre(r.eje_id)} · {r.tipo}{r.nivel ? ` · ${r.nivel}` : ""}
+                        </div>
+                      </div>
+                      {r.archivo_url ? (
+                        <Button asChild size="sm" variant="outline">
+                          <a href={r.archivo_url} target="_blank" rel="noreferrer">
+                            <Download className="mr-2 h-4 w-4" /> Ver
+                          </a>
+                        </Button>
+                      ) : null}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </Section>
+          </>
+        )}
+      </section>
+    </div>
+  );
 }
 
 function SupervisorDashboard() {
