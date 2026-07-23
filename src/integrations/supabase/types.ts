@@ -530,6 +530,66 @@ export type Database = {
         }
         Relationships: []
       }
+      entregas: {
+        Row: {
+          archivo_url: string | null
+          comentario: string | null
+          created_at: string
+          estado: Database["public"]["Enums"]["estado_entrega"]
+          estudiante_id: string
+          fecha_calificada: string | null
+          fecha_entregada: string | null
+          feedback_docente: string | null
+          id: string
+          nota: number | null
+          tarea_id: string
+          updated_at: string
+        }
+        Insert: {
+          archivo_url?: string | null
+          comentario?: string | null
+          created_at?: string
+          estado?: Database["public"]["Enums"]["estado_entrega"]
+          estudiante_id: string
+          fecha_calificada?: string | null
+          fecha_entregada?: string | null
+          feedback_docente?: string | null
+          id?: string
+          nota?: number | null
+          tarea_id: string
+          updated_at?: string
+        }
+        Update: {
+          archivo_url?: string | null
+          comentario?: string | null
+          created_at?: string
+          estado?: Database["public"]["Enums"]["estado_entrega"]
+          estudiante_id?: string
+          fecha_calificada?: string | null
+          fecha_entregada?: string | null
+          feedback_docente?: string | null
+          id?: string
+          nota?: number | null
+          tarea_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "entregas_estudiante_id_fkey"
+            columns: ["estudiante_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "entregas_tarea_id_fkey"
+            columns: ["tarea_id"]
+            isOneToOne: false
+            referencedRelation: "tareas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       inscripciones: {
         Row: {
           curso_id: string
@@ -695,6 +755,54 @@ export type Database = {
           },
         ]
       }
+      tareas: {
+        Row: {
+          creado_por: string | null
+          created_at: string
+          curso_id: string
+          descripcion: string | null
+          fecha_entrega: string | null
+          id: string
+          titulo: string
+          updated_at: string
+        }
+        Insert: {
+          creado_por?: string | null
+          created_at?: string
+          curso_id: string
+          descripcion?: string | null
+          fecha_entrega?: string | null
+          id?: string
+          titulo: string
+          updated_at?: string
+        }
+        Update: {
+          creado_por?: string | null
+          created_at?: string
+          curso_id?: string
+          descripcion?: string | null
+          fecha_entrega?: string | null
+          id?: string
+          titulo?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tareas_creado_por_fkey"
+            columns: ["creado_por"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tareas_curso_id_fkey"
+            columns: ["curso_id"]
+            isOneToOne: false
+            referencedRelation: "cursos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       voluntarios: {
         Row: {
           area_interes: string
@@ -769,6 +877,7 @@ export type Database = {
     }
     Enums: {
       estado_donacion: "pendiente" | "completada" | "fallida" | "cancelada"
+      estado_entrega: "pendiente" | "entregada" | "calificada"
       estado_inscripcion:
         | "pendiente"
         | "confirmada"
@@ -916,6 +1025,7 @@ export const Constants = {
   public: {
     Enums: {
       estado_donacion: ["pendiente", "completada", "fallida", "cancelada"],
+      estado_entrega: ["pendiente", "entregada", "calificada"],
       estado_inscripcion: [
         "pendiente",
         "confirmada",

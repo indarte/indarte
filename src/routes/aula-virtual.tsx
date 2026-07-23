@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { GraduationCap, PlayCircle, FileText, Calendar, Video, Download, Award, Eye, ClipboardList, Layers, BookOpen } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useQuery } from "@tanstack/react-query";
+import { TareasDocenteSection } from "@/components/tareas-docente";
+import { TareasEstudianteSection } from "@/components/tareas-estudiante";
 
 export const Route = createFileRoute("/aula-virtual")({
   ssr: false,
@@ -622,6 +624,8 @@ function DocenteDashboard({ userId }: { userId: string }) {
                 </ul>
               )}
             </Section>
+
+            <TareasDocenteSection cursos={cursos} userId={userId} />
           </>
         )}
       </section>
@@ -788,6 +792,9 @@ function StudentDashboard({ userId }: { userId: string }) {
                 </div>
               )}
             </Section>
+
+            <TareasEstudianteSection cursoIds={cursoIds} userId={userId} />
+
 
             <Section title="Certificados" icon={<Award className="h-5 w-5" />}>
               {certificados.length === 0 ? (
