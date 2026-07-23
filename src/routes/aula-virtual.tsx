@@ -2,7 +2,7 @@ import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { PageHero } from "@/components/page-hero";
 import { Button } from "@/components/ui/button";
-import { GraduationCap, PlayCircle, FileText, Calendar, Video, Download, Award, Eye, ClipboardList } from "lucide-react";
+import { GraduationCap, PlayCircle, FileText, Calendar, Video, Download, Award, Eye, ClipboardList, Layers, BookOpen } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useQuery } from "@tanstack/react-query";
 
