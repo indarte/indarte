@@ -793,6 +793,9 @@ function StudentDashboard({ userId }: { userId: string }) {
               )}
             </Section>
 
+            <TareasEstudianteSection cursoIds={cursoIds} userId={userId} />
+
+
             <Section title="Certificados" icon={<Award className="h-5 w-5" />}>
               {certificados.length === 0 ? (
                 <EmptyRow text="Aún no tienes certificados emitidos." />
