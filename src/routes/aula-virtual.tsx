@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { GraduationCap, PlayCircle, FileText, Calendar, Video, Download, Award, Eye, ClipboardList, Layers, BookOpen } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useQuery } from "@tanstack/react-query";
+import { TareasDocenteSection } from "@/components/tareas-docente";
+import { TareasEstudianteSection } from "@/components/tareas-estudiante";
 
 export const Route = createFileRoute("/aula-virtual")({
   ssr: false,
