@@ -204,7 +204,7 @@ function CursoCard({
       </ul>
 
       <div className="mt-6 flex gap-2">
-        {!userId ? (
+        {!authReady || !userId ? (
           <Button asChild variant="outline" className="flex-1">
             <Link to="/login" search={{ redirect: "/cursos" }}>
               Inicia sesión para inscribirte
