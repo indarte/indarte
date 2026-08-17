@@ -68,6 +68,11 @@ function Cursos() {
   const { data: cursos } = useSuspenseQuery(cursosQueryOptions());
   const { user, role } = useAuth();
   const queryClient = useQueryClient();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const esEstudiante = !!user && role === "estudiante";
 
@@ -85,6 +90,7 @@ function Cursos() {
   });
 
   const inscritos = new Set((inscripcionesQ.data ?? []).map((i) => i.curso_id));
+  const authReady = mounted;
 
   return (
     <div>
