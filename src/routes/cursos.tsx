@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Calendar, Users, Loader2 } from "lucide-react";
 import { useQuery, useQueryClient, useSuspenseQuery, queryOptions } from "@tanstack/react-query";
@@ -107,6 +108,7 @@ function Cursos() {
               <CursoCard
                 key={curso.id}
                 curso={curso}
+                userId={user?.id}
                 estaInscrito={inscritos.has(curso.id)}
                 esEstudiante={esEstudiante}
                 onInscrito={() =>
@@ -123,11 +125,13 @@ function Cursos() {
 
 function CursoCard({
   curso,
+  userId,
   estaInscrito,
   esEstudiante,
   onInscrito,
 }: {
   curso: CursoPublico;
+  userId: string | undefined;
   estaInscrito: boolean;
   esEstudiante: boolean;
   onInscrito: () => void;
@@ -135,10 +139,11 @@ function CursoCard({
   const [isPending, setIsPending] = useState(false);
 
   const handleInscribirme = async () => {
+    if (!userId) return;
     setIsPending(true);
     const { error } = await supabase.from("inscripciones").insert({
       curso_id: curso.id,
-      estudiante_id: (await supabase.auth.getUser()).data.user!.id,
+      estudiante_id: userId,
     });
     setIsPending(false);
 
@@ -218,5 +223,3 @@ function CursoCard({
     </article>
   );
 }
-
-import { useState } from "react";
