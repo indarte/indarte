@@ -2,7 +2,6 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X, LogOut, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import logoAsset from "@/assets/indarte-logo.jpeg.asset.json";
 import { useAuth } from "@/hooks/use-auth";
 
 const nav = [
