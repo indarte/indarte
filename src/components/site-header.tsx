@@ -2,7 +2,6 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X, LogOut, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import logoAsset from "@/assets/indarte-logo.jpeg.asset.json";
 import { useAuth } from "@/hooks/use-auth";
 
 const nav = [
@@ -33,7 +32,7 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 lg:px-8">
         <Link to="/" className="flex min-w-0 items-center gap-3">
-          <img src={logoAsset.url} alt="INDARTE" className="h-12 w-12 shrink-0 rounded-full object-contain" />
+          <img src="/indarte-logo.jpeg" alt="INDARTE" className="h-12 w-12 shrink-0 rounded-full object-contain" />
           <div className="min-w-0 leading-tight">
             <div className="font-display text-lg font-semibold text-foreground">INDARTE</div>
             <div className="truncate text-[11px] uppercase tracking-widest text-muted-foreground">

@@ -1,6 +1,5 @@
 import { Link } from "@tanstack/react-router";
 import { Mail, MapPin, Phone } from "lucide-react";
-import logoAsset from "@/assets/indarte-logo.jpeg.asset.json";
 
 export function SiteFooter() {
   return (
@@ -8,7 +7,7 @@ export function SiteFooter() {
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 md:grid-cols-4 lg:px-8">
         <div>
           <div className="flex items-center gap-3">
-            <img src={logoAsset.url} alt="INDARTE" className="h-11 w-11 rounded-full object-contain" />
+            <img src="/indarte-logo.jpeg" alt="INDARTE" className="h-11 w-11 rounded-full object-contain" />
             <div className="font-display text-lg font-semibold">INDARTE</div>
           </div>
           <p className="mt-4 text-sm text-muted-foreground">
