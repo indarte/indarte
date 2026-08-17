@@ -17,8 +17,9 @@ export const getNoticiasPublicas = createServerFn({ method: "GET" }).handler(asy
 
   const { data, error } = await supabase
     .from("noticias_eventos")
-    .select("id, tipo, titulo, contenido, fecha_evento, imagen_url, created_at, eje:ejes(nombre, slug)", { count: "exact" })
+    .select("id, tipo, titulo, contenido, fecha_evento, imagen_url, created_at, eje:ejes(nombre, slug)")
     .eq("publicado", true)
+    .order("fecha_evento", { ascending: false, nullsFirst: false })
     .order("created_at", { ascending: false });
 
   if (error) throw error;
