@@ -428,6 +428,53 @@ export type Database = {
           },
         ]
       }
+      documentos_transparencia: {
+        Row: {
+          anio: number | null
+          archivo_url: string | null
+          categoria: Database["public"]["Enums"]["categoria_transparencia"]
+          creado_por: string | null
+          created_at: string
+          descripcion: string | null
+          id: string
+          publicado: boolean
+          titulo: string
+          updated_at: string
+        }
+        Insert: {
+          anio?: number | null
+          archivo_url?: string | null
+          categoria?: Database["public"]["Enums"]["categoria_transparencia"]
+          creado_por?: string | null
+          created_at?: string
+          descripcion?: string | null
+          id?: string
+          publicado?: boolean
+          titulo: string
+          updated_at?: string
+        }
+        Update: {
+          anio?: number | null
+          archivo_url?: string | null
+          categoria?: Database["public"]["Enums"]["categoria_transparencia"]
+          creado_por?: string | null
+          created_at?: string
+          descripcion?: string | null
+          id?: string
+          publicado?: boolean
+          titulo?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "documentos_transparencia_creado_por_fkey"
+            columns: ["creado_por"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       donaciones: {
         Row: {
           created_at: string
@@ -662,6 +709,63 @@ export type Database = {
         }
         Relationships: []
       }
+      noticias_eventos: {
+        Row: {
+          contenido: string | null
+          creado_por: string | null
+          created_at: string
+          eje_id: string | null
+          fecha_evento: string | null
+          id: string
+          imagen_url: string | null
+          publicado: boolean
+          tipo: Database["public"]["Enums"]["tipo_noticia"]
+          titulo: string
+          updated_at: string
+        }
+        Insert: {
+          contenido?: string | null
+          creado_por?: string | null
+          created_at?: string
+          eje_id?: string | null
+          fecha_evento?: string | null
+          id?: string
+          imagen_url?: string | null
+          publicado?: boolean
+          tipo?: Database["public"]["Enums"]["tipo_noticia"]
+          titulo: string
+          updated_at?: string
+        }
+        Update: {
+          contenido?: string | null
+          creado_por?: string | null
+          created_at?: string
+          eje_id?: string | null
+          fecha_evento?: string | null
+          id?: string
+          imagen_url?: string | null
+          publicado?: boolean
+          tipo?: Database["public"]["Enums"]["tipo_noticia"]
+          titulo?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "noticias_eventos_creado_por_fkey"
+            columns: ["creado_por"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "noticias_eventos_eje_id_fkey"
+            columns: ["eje_id"]
+            isOneToOne: false
+            referencedRelation: "ejes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -876,6 +980,11 @@ export type Database = {
       }
     }
     Enums: {
+      categoria_transparencia:
+        | "memoria_anual"
+        | "estado_financiero"
+        | "aliados"
+        | "otro"
       estado_donacion: "pendiente" | "completada" | "fallida" | "cancelada"
       estado_entrega: "pendiente" | "entregada" | "calificada"
       estado_inscripcion:
@@ -886,6 +995,7 @@ export type Database = {
       estado_voluntario: "pendiente" | "aprobado" | "archivado"
       nivel_acceso: "publico" | "restringido"
       tipo_donacion: "unica" | "recurrente"
+      tipo_noticia: "noticia" | "evento"
       tipo_recurso: "documento" | "video" | "audio" | "presentacion"
       user_role:
         | "admin"
@@ -1024,6 +1134,12 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      categoria_transparencia: [
+        "memoria_anual",
+        "estado_financiero",
+        "aliados",
+        "otro",
+      ],
       estado_donacion: ["pendiente", "completada", "fallida", "cancelada"],
       estado_entrega: ["pendiente", "entregada", "calificada"],
       estado_inscripcion: [
@@ -1035,6 +1151,7 @@ export const Constants = {
       estado_voluntario: ["pendiente", "aprobado", "archivado"],
       nivel_acceso: ["publico", "restringido"],
       tipo_donacion: ["unica", "recurrente"],
+      tipo_noticia: ["noticia", "evento"],
       tipo_recurso: ["documento", "video", "audio", "presentacion"],
       user_role: [
         "admin",
