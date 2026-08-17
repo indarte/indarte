@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Calendar, Users, Loader2 } from "lucide-react";
 import { useQuery, useQueryClient, useSuspenseQuery, queryOptions } from "@tanstack/react-query";
@@ -115,6 +115,7 @@ function Cursos() {
                 key={curso.id}
                 curso={curso}
                 userId={user?.id}
+                authReady={authReady}
                 estaInscrito={inscritos.has(curso.id)}
                 esEstudiante={esEstudiante}
                 onInscrito={() =>
@@ -132,12 +133,14 @@ function Cursos() {
 function CursoCard({
   curso,
   userId,
+  authReady,
   estaInscrito,
   esEstudiante,
   onInscrito,
 }: {
   curso: CursoPublico;
   userId: string | undefined;
+  authReady: boolean;
   estaInscrito: boolean;
   esEstudiante: boolean;
   onInscrito: () => void;
