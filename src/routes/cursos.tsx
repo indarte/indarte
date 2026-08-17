@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Calendar, Users, Loader2 } from "lucide-react";
 import { useQuery, useQueryClient, useSuspenseQuery, queryOptions } from "@tanstack/react-query";
@@ -68,6 +68,11 @@ function Cursos() {
   const { data: cursos } = useSuspenseQuery(cursosQueryOptions());
   const { user, role } = useAuth();
   const queryClient = useQueryClient();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const esEstudiante = !!user && role === "estudiante";
 
@@ -85,6 +90,7 @@ function Cursos() {
   });
 
   const inscritos = new Set((inscripcionesQ.data ?? []).map((i) => i.curso_id));
+  const authReady = mounted;
 
   return (
     <div>
@@ -109,6 +115,7 @@ function Cursos() {
                 key={curso.id}
                 curso={curso}
                 userId={user?.id}
+                authReady={authReady}
                 estaInscrito={inscritos.has(curso.id)}
                 esEstudiante={esEstudiante}
                 onInscrito={() =>
@@ -126,12 +133,14 @@ function Cursos() {
 function CursoCard({
   curso,
   userId,
+  authReady,
   estaInscrito,
   esEstudiante,
   onInscrito,
 }: {
   curso: CursoPublico;
   userId: string | undefined;
+  authReady: boolean;
   estaInscrito: boolean;
   esEstudiante: boolean;
   onInscrito: () => void;
@@ -195,7 +204,13 @@ function CursoCard({
       </ul>
 
       <div className="mt-6 flex gap-2">
-        {esEstudiante ? (
+        {!authReady || !userId ? (
+          <Button asChild variant="outline" className="flex-1">
+            <Link to="/login" search={{ redirect: "/cursos" }}>
+              Inicia sesión para inscribirte
+            </Link>
+          </Button>
+        ) : esEstudiante ? (
           estaInscrito ? (
             <Button variant="outline" className="flex-1" disabled>
               Ya inscrito
@@ -212,13 +227,7 @@ function CursoCard({
               )}
             </Button>
           )
-        ) : (
-          <Button asChild variant="outline" className="flex-1">
-            <Link to="/login" search={{ redirect: "/cursos" }}>
-              Inicia sesión para inscribirte
-            </Link>
-          </Button>
-        )}
+        ) : null}
       </div>
     </article>
   );
