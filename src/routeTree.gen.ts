@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VoluntariadoRouteImport } from './routes/voluntariado'
+import { Route as VerificarCertificadoRouteImport } from './routes/verificar-certificado'
 import { Route as TransparenciaRouteImport } from './routes/transparencia'
 import { Route as RegistroRouteImport } from './routes/registro'
 import { Route as QuienesSomosRouteImport } from './routes/quienes-somos'
@@ -30,6 +31,11 @@ import { Route as DirectorioArtesanosIdRouteImport } from './routes/directorio-a
 const VoluntariadoRoute = VoluntariadoRouteImport.update({
   id: '/voluntariado',
   path: '/voluntariado',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerificarCertificadoRoute = VerificarCertificadoRouteImport.update({
+  id: '/verificar-certificado',
+  path: '/verificar-certificado',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TransparenciaRoute = TransparenciaRouteImport.update({
@@ -127,6 +133,7 @@ export interface FileRoutesByFullPath {
   '/quienes-somos': typeof QuienesSomosRoute
   '/registro': typeof RegistroRoute
   '/transparencia': typeof TransparenciaRoute
+  '/verificar-certificado': typeof VerificarCertificadoRoute
   '/voluntariado': typeof VoluntariadoRoute
   '/directorio-artesanos/$id': typeof DirectorioArtesanosIdRoute
   '/ejes/$eje': typeof EjesEjeRoute
@@ -146,6 +153,7 @@ export interface FileRoutesByTo {
   '/quienes-somos': typeof QuienesSomosRoute
   '/registro': typeof RegistroRoute
   '/transparencia': typeof TransparenciaRoute
+  '/verificar-certificado': typeof VerificarCertificadoRoute
   '/voluntariado': typeof VoluntariadoRoute
   '/directorio-artesanos/$id': typeof DirectorioArtesanosIdRoute
   '/ejes/$eje': typeof EjesEjeRoute
@@ -166,6 +174,7 @@ export interface FileRoutesById {
   '/quienes-somos': typeof QuienesSomosRoute
   '/registro': typeof RegistroRoute
   '/transparencia': typeof TransparenciaRoute
+  '/verificar-certificado': typeof VerificarCertificadoRoute
   '/voluntariado': typeof VoluntariadoRoute
   '/directorio-artesanos/$id': typeof DirectorioArtesanosIdRoute
   '/ejes/$eje': typeof EjesEjeRoute
@@ -187,6 +196,7 @@ export interface FileRouteTypes {
     | '/quienes-somos'
     | '/registro'
     | '/transparencia'
+    | '/verificar-certificado'
     | '/voluntariado'
     | '/directorio-artesanos/$id'
     | '/ejes/$eje'
@@ -206,6 +216,7 @@ export interface FileRouteTypes {
     | '/quienes-somos'
     | '/registro'
     | '/transparencia'
+    | '/verificar-certificado'
     | '/voluntariado'
     | '/directorio-artesanos/$id'
     | '/ejes/$eje'
@@ -225,6 +236,7 @@ export interface FileRouteTypes {
     | '/quienes-somos'
     | '/registro'
     | '/transparencia'
+    | '/verificar-certificado'
     | '/voluntariado'
     | '/directorio-artesanos/$id'
     | '/ejes/$eje'
@@ -245,6 +257,7 @@ export interface RootRouteChildren {
   QuienesSomosRoute: typeof QuienesSomosRoute
   RegistroRoute: typeof RegistroRoute
   TransparenciaRoute: typeof TransparenciaRoute
+  VerificarCertificadoRoute: typeof VerificarCertificadoRoute
   VoluntariadoRoute: typeof VoluntariadoRoute
   DirectorioArtesanosIdRoute: typeof DirectorioArtesanosIdRoute
   EjesEjeRoute: typeof EjesEjeRoute
@@ -259,6 +272,13 @@ declare module '@tanstack/react-router' {
       path: '/voluntariado'
       fullPath: '/voluntariado'
       preLoaderRoute: typeof VoluntariadoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verificar-certificado': {
+      id: '/verificar-certificado'
+      path: '/verificar-certificado'
+      fullPath: '/verificar-certificado'
+      preLoaderRoute: typeof VerificarCertificadoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/transparencia': {
@@ -389,6 +409,7 @@ const rootRouteChildren: RootRouteChildren = {
   QuienesSomosRoute: QuienesSomosRoute,
   RegistroRoute: RegistroRoute,
   TransparenciaRoute: TransparenciaRoute,
+  VerificarCertificadoRoute: VerificarCertificadoRoute,
   VoluntariadoRoute: VoluntariadoRoute,
   DirectorioArtesanosIdRoute: DirectorioArtesanosIdRoute,
   EjesEjeRoute: EjesEjeRoute,

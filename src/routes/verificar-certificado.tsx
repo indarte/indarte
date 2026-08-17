@@ -103,7 +103,7 @@ function VerificarCertificado() {
     <>
       <PageHero
         title="Verificar certificado"
-        subtitle="Ingresa el código de verificación impreso en el certificado para confirmar su autenticidad."
+        description="Ingresa el código de verificación impreso en el certificado para confirmar su autenticidad."
       />
 
       <section className="container mx-auto max-w-2xl px-4 py-14">
