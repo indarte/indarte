@@ -1,8 +1,9 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
-import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
+import { queryOptions, useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Phone, MessageCircle, Instagram, Facebook } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth";
 
 type ArtesanoDetalle = {
   id: string;
@@ -12,8 +13,6 @@ type ArtesanoDetalle = {
   biografia: string | null;
   foto_url: string | null;
   disponible: boolean | null;
-  telefono: string | null;
-  whatsapp: string | null;
   instagram: string | null;
   facebook: string | null;
 };
@@ -34,7 +33,7 @@ const artesanoQuery = (id: string) =>
           supabase
             .from("artesanos")
             .select(
-              "id,nombre,oficio,provincia,biografia,foto_url,disponible,telefono,whatsapp,instagram,facebook,activo",
+              "id,nombre,oficio,provincia,biografia,foto_url,disponible,instagram,facebook,activo",
             )
             .eq("id", id)
             .maybeSingle(),
@@ -53,6 +52,7 @@ const artesanoQuery = (id: string) =>
       };
     },
   });
+
 
 export const Route = createFileRoute("/directorio-artesanos/$id")({
   loader: ({ context, params }) =>
