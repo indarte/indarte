@@ -7,6 +7,8 @@ import { useAuth } from "@/hooks/use-auth";
 import { useQuery } from "@tanstack/react-query";
 import { TareasDocenteSection } from "@/components/tareas-docente";
 import { TareasEstudianteSection } from "@/components/tareas-estudiante";
+import { ArtesanoDashboard } from "@/components/panel-artesano";
+import { VoluntarioDashboard, DonanteDashboard } from "@/components/panel-voluntario-donante";
 
 export const Route = createFileRoute("/aula-virtual")({
   ssr: false,
@@ -72,6 +74,18 @@ function AulaVirtual() {
 
   if (role === "coordinador_eje") {
     return <CoordinadorDashboard userId={user!.id} />;
+  }
+
+  if (role === "artesano") {
+    return <ArtesanoDashboard userId={user!.id} />;
+  }
+
+  if (role === "voluntario") {
+    return <VoluntarioDashboard userId={user!.id} />;
+  }
+
+  if (role === "donante") {
+    return <DonanteDashboard userId={user!.id} />;
   }
 
   return <StudentDashboard userId={user!.id} />;
