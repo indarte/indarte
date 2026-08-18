@@ -98,18 +98,36 @@ function PerfilArtesano() {
   const { id } = Route.useParams();
   const { data } = useSuspenseQuery(artesanoQuery(id));
   const { artesano, galeria } = data;
+  const { session } = useAuth();
+
+  // Los datos de contacto telefónico solo se consultan (y solo son accesibles)
+  // para personas con sesión iniciada.
+  const { data: contacto } = useQuery({
+    queryKey: ["artesano-contacto", id, Boolean(session)],
+    enabled: Boolean(session),
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("artesanos")
+        .select("telefono,whatsapp")
+        .eq("id", id)
+        .maybeSingle();
+      if (error) throw error;
+      return data as { telefono: string | null; whatsapp: string | null } | null;
+    },
+  });
 
   const contactos = [
-    artesano.telefono && {
+    contacto?.telefono && {
       icon: Phone,
-      label: artesano.telefono,
-      href: `tel:${artesano.telefono.replace(/\s/g, "")}`,
+      label: contacto.telefono,
+      href: `tel:${contacto.telefono.replace(/\s/g, "")}`,
     },
-    artesano.whatsapp && {
+    contacto?.whatsapp && {
       icon: MessageCircle,
-      label: `WhatsApp: ${artesano.whatsapp}`,
-      href: `https://wa.me/${artesano.whatsapp.replace(/[^0-9]/g, "")}`,
+      label: `WhatsApp: ${contacto.whatsapp}`,
+      href: `https://wa.me/${contacto.whatsapp.replace(/[^0-9]/g, "")}`,
     },
+
     artesano.instagram && {
       icon: Instagram,
       label: artesano.instagram,
