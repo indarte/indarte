@@ -185,8 +185,6 @@ function Voluntariado() {
       </section>
     </div>
   );
+}
 
-      </section>
-    </div>
-  );
 }
