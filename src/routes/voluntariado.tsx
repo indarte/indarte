@@ -186,5 +186,3 @@ function Voluntariado() {
     </div>
   );
 }
-
-}
