@@ -22,6 +22,7 @@ import { Route as ContactoRouteImport } from './routes/contacto'
 import { Route as BibliotecaRouteImport } from './routes/biblioteca'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AulaVirtualRouteImport } from './routes/aula-virtual'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as EjesIndexRouteImport } from './routes/ejes.index'
 import { Route as DirectorioArtesanosIndexRouteImport } from './routes/directorio-artesanos.index'
@@ -93,6 +94,11 @@ const AulaVirtualRoute = AulaVirtualRouteImport.update({
   path: '/aula-virtual',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -122,6 +128,7 @@ const DirectorioArtesanosIdRoute = DirectorioArtesanosIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/aula-virtual': typeof AulaVirtualRoute
   '/auth': typeof AuthRoute
   '/biblioteca': typeof BibliotecaRoute
@@ -142,6 +149,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/aula-virtual': typeof AulaVirtualRoute
   '/auth': typeof AuthRoute
   '/biblioteca': typeof BibliotecaRoute
@@ -163,6 +171,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/aula-virtual': typeof AulaVirtualRoute
   '/auth': typeof AuthRoute
   '/biblioteca': typeof BibliotecaRoute
@@ -185,6 +194,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/aula-virtual'
     | '/auth'
     | '/biblioteca'
@@ -205,6 +215,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin'
     | '/aula-virtual'
     | '/auth'
     | '/biblioteca'
@@ -225,6 +236,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/aula-virtual'
     | '/auth'
     | '/biblioteca'
@@ -246,6 +258,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
   AulaVirtualRoute: typeof AulaVirtualRoute
   AuthRoute: typeof AuthRoute
   BibliotecaRoute: typeof BibliotecaRoute
@@ -358,6 +371,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AulaVirtualRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -398,6 +418,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
   AulaVirtualRoute: AulaVirtualRoute,
   AuthRoute: AuthRoute,
   BibliotecaRoute: BibliotecaRoute,

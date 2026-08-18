@@ -19,8 +19,9 @@ const nav = [
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
-  const { session, signOut } = useAuth();
+  const { session, role, signOut } = useAuth();
   const navigate = useNavigate();
+
 
   const handleSignOut = async () => {
     await signOut();
@@ -53,7 +54,17 @@ export function SiteHeader() {
               {n.label}
             </Link>
           ))}
+          {role === "admin" && (
+            <Link
+              to="/admin"
+              className="rounded-md px-3 py-2 text-sm font-medium text-primary transition hover:bg-secondary"
+              activeProps={{ className: "bg-secondary" }}
+            >
+              Panel Admin
+            </Link>
+          )}
         </nav>
+
 
         <div className="flex items-center gap-2">
           {session ? (
@@ -95,6 +106,16 @@ export function SiteHeader() {
                 {n.label}
               </Link>
             ))}
+            {role === "admin" && (
+              <Link
+                to="/admin"
+                onClick={() => setOpen(false)}
+                className="rounded-md px-3 py-2.5 text-sm font-medium text-primary hover:bg-secondary"
+              >
+                Panel Admin
+              </Link>
+            )}
+
             {session ? (
               <button
                 onClick={handleSignOut}
