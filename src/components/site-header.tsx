@@ -106,6 +106,16 @@ export function SiteHeader() {
                 {n.label}
               </Link>
             ))}
+            {role === "admin" && (
+              <Link
+                to="/admin"
+                onClick={() => setOpen(false)}
+                className="rounded-md px-3 py-2.5 text-sm font-medium text-primary hover:bg-secondary"
+              >
+                Panel Admin
+              </Link>
+            )}
+
             {session ? (
               <button
                 onClick={handleSignOut}
