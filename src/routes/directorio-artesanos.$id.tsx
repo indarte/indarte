@@ -1,8 +1,9 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
-import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
+import { queryOptions, useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Phone, MessageCircle, Instagram, Facebook } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth";
 
 type ArtesanoDetalle = {
   id: string;
@@ -12,8 +13,6 @@ type ArtesanoDetalle = {
   biografia: string | null;
   foto_url: string | null;
   disponible: boolean | null;
-  telefono: string | null;
-  whatsapp: string | null;
   instagram: string | null;
   facebook: string | null;
 };
@@ -34,7 +33,7 @@ const artesanoQuery = (id: string) =>
           supabase
             .from("artesanos")
             .select(
-              "id,nombre,oficio,provincia,biografia,foto_url,disponible,telefono,whatsapp,instagram,facebook,activo",
+              "id,nombre,oficio,provincia,biografia,foto_url,disponible,instagram,facebook,activo",
             )
             .eq("id", id)
             .maybeSingle(),
@@ -53,6 +52,7 @@ const artesanoQuery = (id: string) =>
       };
     },
   });
+
 
 export const Route = createFileRoute("/directorio-artesanos/$id")({
   loader: ({ context, params }) =>
@@ -98,18 +98,36 @@ function PerfilArtesano() {
   const { id } = Route.useParams();
   const { data } = useSuspenseQuery(artesanoQuery(id));
   const { artesano, galeria } = data;
+  const { session } = useAuth();
+
+  // Los datos de contacto telefónico solo se consultan (y solo son accesibles)
+  // para personas con sesión iniciada.
+  const { data: contacto } = useQuery({
+    queryKey: ["artesano-contacto", id, Boolean(session)],
+    enabled: Boolean(session),
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("artesanos")
+        .select("telefono,whatsapp")
+        .eq("id", id)
+        .maybeSingle();
+      if (error) throw error;
+      return data as { telefono: string | null; whatsapp: string | null } | null;
+    },
+  });
 
   const contactos = [
-    artesano.telefono && {
+    contacto?.telefono && {
       icon: Phone,
-      label: artesano.telefono,
-      href: `tel:${artesano.telefono.replace(/\s/g, "")}`,
+      label: contacto.telefono,
+      href: `tel:${contacto.telefono.replace(/\s/g, "")}`,
     },
-    artesano.whatsapp && {
+    contacto?.whatsapp && {
       icon: MessageCircle,
-      label: `WhatsApp: ${artesano.whatsapp}`,
-      href: `https://wa.me/${artesano.whatsapp.replace(/[^0-9]/g, "")}`,
+      label: `WhatsApp: ${contacto.whatsapp}`,
+      href: `https://wa.me/${contacto.whatsapp.replace(/[^0-9]/g, "")}`,
     },
+
     artesano.instagram && {
       icon: Instagram,
       label: artesano.instagram,
