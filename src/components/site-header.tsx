@@ -19,8 +19,9 @@ const nav = [
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
-  const { session, signOut } = useAuth();
+  const { session, role, signOut } = useAuth();
   const navigate = useNavigate();
+
 
   const handleSignOut = async () => {
     await signOut();
