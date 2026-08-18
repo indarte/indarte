@@ -74,6 +74,18 @@ function AulaVirtual() {
     return <CoordinadorDashboard userId={user!.id} />;
   }
 
+  if (role === "artesano") {
+    return <ArtesanoDashboard userId={user!.id} />;
+  }
+
+  if (role === "voluntario") {
+    return <VoluntarioDashboard userId={user!.id} />;
+  }
+
+  if (role === "donante") {
+    return <DonanteDashboard userId={user!.id} />;
+  }
+
   return <StudentDashboard userId={user!.id} />;
 }
 
