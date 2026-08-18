@@ -1,10 +1,37 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import { PageHero } from "@/components/page-hero";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+
+const AREAS = [
+  { value: "educacion_artistica", label: "Educación Artística" },
+  { value: "primera_infancia", label: "Atención a la Primera Infancia" },
+  { value: "capacitacion_tecnica", label: "Capacitación Técnico Profesional" },
+  { value: "artesania", label: "Fomento y Desarrollo Artesanal" },
+  { value: "administrativo", label: "Apoyo Administrativo" },
+  { value: "eventos", label: "Producción de Eventos" },
+];
+
+const EMPTY = {
+  nombre: "",
+  email: "",
+  telefono: "",
+  area_interes: "",
+  experiencia_previa: "",
+};
+
 
 export const Route = createFileRoute("/voluntariado")({
   head: () => ({
