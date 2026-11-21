@@ -9,89 +9,29 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as VoluntariadoRouteImport } from './routes/voluntariado'
-import { Route as VerificarCertificadoRouteImport } from './routes/verificar-certificado'
-import { Route as TransparenciaRouteImport } from './routes/transparencia'
-import { Route as RegistroRouteImport } from './routes/registro'
-import { Route as QuienesSomosRouteImport } from './routes/quienes-somos'
-import { Route as NoticiasRouteImport } from './routes/noticias'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as DonaRouteImport } from './routes/dona'
-import { Route as CursosRouteImport } from './routes/cursos'
-import { Route as ContactoRouteImport } from './routes/contacto'
-import { Route as BibliotecaRouteImport } from './routes/biblioteca'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AulaVirtualRouteImport } from './routes/aula-virtual'
-import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as EjesIndexRouteImport } from './routes/ejes.index'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AulaVirtualRouteImport } from './routes/aula-virtual'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as BibliotecaRouteImport } from './routes/biblioteca'
+import { Route as ContactoRouteImport } from './routes/contacto'
+import { Route as CursosRouteImport } from './routes/cursos'
+import { Route as DonaRouteImport } from './routes/dona'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as NoticiasRouteImport } from './routes/noticias'
+import { Route as QuienesSomosRouteImport } from './routes/quienes-somos'
+import { Route as RegistroRouteImport } from './routes/registro'
+import { Route as TransparenciaRouteImport } from './routes/transparencia'
+import { Route as VerificarCertificadoRouteImport } from './routes/verificar-certificado'
+import { Route as VoluntariadoRouteImport } from './routes/voluntariado'
 import { Route as DirectorioArtesanosIndexRouteImport } from './routes/directorio-artesanos.index'
-import { Route as EjesEjeRouteImport } from './routes/ejes.$eje'
 import { Route as DirectorioArtesanosIdRouteImport } from './routes/directorio-artesanos.$id'
+import { Route as EjesIndexRouteImport } from './routes/ejes.index'
+import { Route as EjesEjeRouteImport } from './routes/ejes.$eje'
 
-const VoluntariadoRoute = VoluntariadoRouteImport.update({
-  id: '/voluntariado',
-  path: '/voluntariado',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const VerificarCertificadoRoute = VerificarCertificadoRouteImport.update({
-  id: '/verificar-certificado',
-  path: '/verificar-certificado',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TransparenciaRoute = TransparenciaRouteImport.update({
-  id: '/transparencia',
-  path: '/transparencia',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RegistroRoute = RegistroRouteImport.update({
-  id: '/registro',
-  path: '/registro',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const QuienesSomosRoute = QuienesSomosRouteImport.update({
-  id: '/quienes-somos',
-  path: '/quienes-somos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NoticiasRoute = NoticiasRouteImport.update({
-  id: '/noticias',
-  path: '/noticias',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DonaRoute = DonaRouteImport.update({
-  id: '/dona',
-  path: '/dona',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CursosRoute = CursosRouteImport.update({
-  id: '/cursos',
-  path: '/cursos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactoRoute = ContactoRouteImport.update({
-  id: '/contacto',
-  path: '/contacto',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BibliotecaRoute = BibliotecaRouteImport.update({
-  id: '/biblioteca',
-  path: '/biblioteca',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AulaVirtualRoute = AulaVirtualRouteImport.update({
-  id: '/aula-virtual',
-  path: '/aula-virtual',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -99,14 +39,69 @@ const AdminRoute = AdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AulaVirtualRoute = AulaVirtualRouteImport.update({
+  id: '/aula-virtual',
+  path: '/aula-virtual',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EjesIndexRoute = EjesIndexRouteImport.update({
-  id: '/ejes/',
-  path: '/ejes/',
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BibliotecaRoute = BibliotecaRouteImport.update({
+  id: '/biblioteca',
+  path: '/biblioteca',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactoRoute = ContactoRouteImport.update({
+  id: '/contacto',
+  path: '/contacto',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CursosRoute = CursosRouteImport.update({
+  id: '/cursos',
+  path: '/cursos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DonaRoute = DonaRouteImport.update({
+  id: '/dona',
+  path: '/dona',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NoticiasRoute = NoticiasRouteImport.update({
+  id: '/noticias',
+  path: '/noticias',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuienesSomosRoute = QuienesSomosRouteImport.update({
+  id: '/quienes-somos',
+  path: '/quienes-somos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegistroRoute = RegistroRouteImport.update({
+  id: '/registro',
+  path: '/registro',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TransparenciaRoute = TransparenciaRouteImport.update({
+  id: '/transparencia',
+  path: '/transparencia',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerificarCertificadoRoute = VerificarCertificadoRouteImport.update({
+  id: '/verificar-certificado',
+  path: '/verificar-certificado',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VoluntariadoRoute = VoluntariadoRouteImport.update({
+  id: '/voluntariado',
+  path: '/voluntariado',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DirectorioArtesanosIndexRoute =
@@ -115,14 +110,19 @@ const DirectorioArtesanosIndexRoute =
     path: '/directorio-artesanos/',
     getParentRoute: () => rootRouteImport,
   } as any)
-const EjesEjeRoute = EjesEjeRouteImport.update({
-  id: '/ejes/$eje',
-  path: '/ejes/$eje',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const DirectorioArtesanosIdRoute = DirectorioArtesanosIdRouteImport.update({
   id: '/directorio-artesanos/$id',
   path: '/directorio-artesanos/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EjesIndexRoute = EjesIndexRouteImport.update({
+  id: '/ejes/',
+  path: '/ejes/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EjesEjeRoute = EjesEjeRouteImport.update({
+  id: '/ejes/$eje',
+  path: '/ejes/$eje',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -280,95 +280,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/voluntariado': {
-      id: '/voluntariado'
-      path: '/voluntariado'
-      fullPath: '/voluntariado'
-      preLoaderRoute: typeof VoluntariadoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/verificar-certificado': {
-      id: '/verificar-certificado'
-      path: '/verificar-certificado'
-      fullPath: '/verificar-certificado'
-      preLoaderRoute: typeof VerificarCertificadoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/transparencia': {
-      id: '/transparencia'
-      path: '/transparencia'
-      fullPath: '/transparencia'
-      preLoaderRoute: typeof TransparenciaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/registro': {
-      id: '/registro'
-      path: '/registro'
-      fullPath: '/registro'
-      preLoaderRoute: typeof RegistroRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/quienes-somos': {
-      id: '/quienes-somos'
-      path: '/quienes-somos'
-      fullPath: '/quienes-somos'
-      preLoaderRoute: typeof QuienesSomosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/noticias': {
-      id: '/noticias'
-      path: '/noticias'
-      fullPath: '/noticias'
-      preLoaderRoute: typeof NoticiasRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dona': {
-      id: '/dona'
-      path: '/dona'
-      fullPath: '/dona'
-      preLoaderRoute: typeof DonaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/cursos': {
-      id: '/cursos'
-      path: '/cursos'
-      fullPath: '/cursos'
-      preLoaderRoute: typeof CursosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contacto': {
-      id: '/contacto'
-      path: '/contacto'
-      fullPath: '/contacto'
-      preLoaderRoute: typeof ContactoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/biblioteca': {
-      id: '/biblioteca'
-      path: '/biblioteca'
-      fullPath: '/biblioteca'
-      preLoaderRoute: typeof BibliotecaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/aula-virtual': {
-      id: '/aula-virtual'
-      path: '/aula-virtual'
-      fullPath: '/aula-virtual'
-      preLoaderRoute: typeof AulaVirtualRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -378,18 +294,95 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/aula-virtual': {
+      id: '/aula-virtual'
+      path: '/aula-virtual'
+      fullPath: '/aula-virtual'
+      preLoaderRoute: typeof AulaVirtualRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/ejes/': {
-      id: '/ejes/'
-      path: '/ejes'
-      fullPath: '/ejes/'
-      preLoaderRoute: typeof EjesIndexRouteImport
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/biblioteca': {
+      id: '/biblioteca'
+      path: '/biblioteca'
+      fullPath: '/biblioteca'
+      preLoaderRoute: typeof BibliotecaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contacto': {
+      id: '/contacto'
+      path: '/contacto'
+      fullPath: '/contacto'
+      preLoaderRoute: typeof ContactoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cursos': {
+      id: '/cursos'
+      path: '/cursos'
+      fullPath: '/cursos'
+      preLoaderRoute: typeof CursosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dona': {
+      id: '/dona'
+      path: '/dona'
+      fullPath: '/dona'
+      preLoaderRoute: typeof DonaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/noticias': {
+      id: '/noticias'
+      path: '/noticias'
+      fullPath: '/noticias'
+      preLoaderRoute: typeof NoticiasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quienes-somos': {
+      id: '/quienes-somos'
+      path: '/quienes-somos'
+      fullPath: '/quienes-somos'
+      preLoaderRoute: typeof QuienesSomosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/registro': {
+      id: '/registro'
+      path: '/registro'
+      fullPath: '/registro'
+      preLoaderRoute: typeof RegistroRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/transparencia': {
+      id: '/transparencia'
+      path: '/transparencia'
+      fullPath: '/transparencia'
+      preLoaderRoute: typeof TransparenciaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verificar-certificado': {
+      id: '/verificar-certificado'
+      path: '/verificar-certificado'
+      fullPath: '/verificar-certificado'
+      preLoaderRoute: typeof VerificarCertificadoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/voluntariado': {
+      id: '/voluntariado'
+      path: '/voluntariado'
+      fullPath: '/voluntariado'
+      preLoaderRoute: typeof VoluntariadoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/directorio-artesanos/': {
@@ -399,18 +392,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DirectorioArtesanosIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/ejes/$eje': {
-      id: '/ejes/$eje'
-      path: '/ejes/$eje'
-      fullPath: '/ejes/$eje'
-      preLoaderRoute: typeof EjesEjeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/directorio-artesanos/$id': {
       id: '/directorio-artesanos/$id'
       path: '/directorio-artesanos/$id'
       fullPath: '/directorio-artesanos/$id'
       preLoaderRoute: typeof DirectorioArtesanosIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ejes/': {
+      id: '/ejes/'
+      path: '/ejes'
+      fullPath: '/ejes/'
+      preLoaderRoute: typeof EjesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ejes/$eje': {
+      id: '/ejes/$eje'
+      path: '/ejes/$eje'
+      fullPath: '/ejes/$eje'
+      preLoaderRoute: typeof EjesEjeRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
