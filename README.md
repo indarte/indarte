@@ -1,24 +1,45 @@
-# INDARTE - Portal Institucional
+# INDARTE — Portal institucional
 
-INDARTE - Portal Institucional
+Portal web de INDARTE, ONG dominicana de desarrollo cultural y educativo.
+Incluye sitio público (quiénes somos, ejes, directorio de artesanos, biblioteca,
+noticias, transparencia, contacto, dona, voluntariado), aula virtual por roles
+y panel de administración.
 
-This project was built with [Lovable](https://lovable.dev).
+## Stack
 
-## Build with Lovable
+| Capa | Tecnología |
+|---|---|
+| Frontend / SSR | TanStack Start + React 19 + Tailwind CSS v4 + shadcn/ui (Radix) |
+| Backend | Supabase (Postgres + RLS, Auth, Storage, Edge Functions) |
+| Hosting | Vercel (build con Nitro) |
+| DNS | Cloudflare (solo DNS, sin proxy) |
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/80a5959d-1f8c-43b1-aebf-388e9d5a880c).
+## Desarrollo local
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+Requisitos: Node 22+ y [Bun](https://bun.sh) (o npm).
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
+bun install          # o: npm install
+cp .env.example .env # completar con las claves del proyecto Supabase
+bun run dev          # http://localhost:8080
 ```
+
+Scripts: `dev`, `build`, `start` (sirve `.output/` con Node), `lint`, `typecheck`, `format`.
+
+## Variables de entorno
+
+| Variable | Dónde | Uso |
+|---|---|---|
+| `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`, `VITE_SUPABASE_PROJECT_ID` | cliente | conexión pública a Supabase |
+| `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_PROJECT_ID` | servidor | server functions |
+| `SUPABASE_SERVICE_ROLE_KEY` | **solo servidor** (Vercel) | operaciones privilegiadas; nunca en el cliente ni en git |
+
+## Base de datos
+
+Las migraciones viven en `supabase/migrations/` y se aplican con la CLI de Supabase
+(`supabase link --project-ref <ref>` y `supabase db push`).
+
+## Despliegue
+
+Vercel construye con `bun run build` y Nitro detecta el destino automáticamente.
+Documentación del proceso de independización: `docs/INDEPENDENCIA.md`.

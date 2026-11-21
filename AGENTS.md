@@ -1,10 +1,9 @@
-<!-- LOVABLE:BEGIN -->
-> [!IMPORTANT]
-> This project is connected to [Lovable](https://lovable.dev). Avoid rewriting
-> published git history — force pushing, or rebasing/amending/squashing commits
-> that are already pushed — as it rewrites history on Lovable's side and the
-> user will likely lose their project history.
->
-> Commits you push to the connected branch sync back to Lovable and show up in
-> the editor, so keep the branch in a working state.
-<!-- LOVABLE:END -->
+# Guía para asistentes de código
+
+Proyecto INDARTE (TanStack Start + Supabase + Vercel). Ver `README.md`.
+
+- Repositorio propio de la organización `indarte`; no depende de ninguna plataforma de generación de código.
+- No reescribir el historial publicado de `main`.
+- Las claves de servicio (`SUPABASE_SERVICE_ROLE_KEY`) jamás se versionan ni se exponen al cliente.
+- Cambios de esquema: siempre como migración nueva en `supabase/migrations/`.
+- Antes de proponer un cambio: `bun run typecheck && bun run lint && bun run build`.
