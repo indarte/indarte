@@ -33,6 +33,13 @@ Lo que NO dependía de Lovable: Supabase (proyecto propio), GitHub (org `indarte
 4. Desconectar GitHub en Lovable y archivar el proyecto (cuenta personal de José).
 5. Reactivar auto-deploy Vercel↔GitHub (hoy se usa Deploy Hook manual).
 
+## Seguridad: TanStack Start (CVE-2026-102989)
+
+Vercel bloquea el despliegue de `@tanstack/react-start@1.168.26` por una vulnerabilidad XSS reflejada
+(afecta a respuestas de server functions; corregida desde react-start 1.168.60 / start-server-core 1.169.39).
+Actualizado a react-start 1.169.7 (start-server-core 1.169.45), react-router 1.170.46 y router-plugin 1.169.0.
+`main` usa la versión vulnerable: este cambio debe llegar a producción.
+
 ## Pendientes heredados / recomendaciones
 
 - `.env` está versionado (solo claves publicables, no secretas). Recomendado: dejar de versionarlo y usar `.env.example`; las variables ya existen en Vercel.

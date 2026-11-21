@@ -82,7 +82,7 @@ export const Route = createFileRoute("/biblioteca")({
       <h1 className="mb-2 font-serif text-3xl">
         No pudimos cargar la biblioteca
       </h1>
-      <p className="text-muted-foreground">{error.message}</p>
+      <p className="text-muted-foreground">{error instanceof Error ? error.message : String(error)}</p>
     </div>
   ),
   notFoundComponent: () => (
