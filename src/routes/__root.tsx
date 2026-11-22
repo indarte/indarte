@@ -3,6 +3,8 @@ import {
   Outlet,
   Link,
   createRootRouteWithContext,
+  redirect,
+  useLocation,
   useRouter,
   HeadContent,
   Scripts,
@@ -14,6 +16,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { AuthProvider } from "@/hooks/use-auth";
 import { Toaster } from "sonner";
+import { UNDER_CONSTRUCTION, isAllowedWhenLocked } from "@/lib/site-config";
 
 function NotFoundComponent() {
   return (
@@ -79,8 +82,15 @@ function ErrorComponent({ error, reset }: { error: unknown; reset: () => void })
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+  // Modo "Sitio en construcción": todo lo público redirige a /en-construccion.
+  beforeLoad: ({ location }) => {
+    if (UNDER_CONSTRUCTION && !isAllowedWhenLocked(location.pathname)) {
+      throw redirect({ to: "/en-construccion" });
+    }
+  },
   head: () => ({
     meta: [
+      ...(UNDER_CONSTRUCTION ? [{ name: "robots", content: "noindex, nofollow" }] : []),
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "INDARTE — Instituto Nacional para el Desarrollo del Arte y la Educación, INC" },
@@ -132,17 +142,23 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const { pathname } = useLocation();
+  const bare = pathname === "/en-construccion";
 
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <div className="flex min-h-screen flex-col">
-          <SiteHeader />
-          <main className="flex-1">
-            <Outlet />
-          </main>
-          <SiteFooter />
-        </div>
+        {bare ? (
+          <Outlet />
+        ) : (
+          <div className="flex min-h-screen flex-col">
+            <SiteHeader />
+            <main className="flex-1">
+              <Outlet />
+            </main>
+            <SiteFooter />
+          </div>
+        )}
         <Toaster richColors position="top-center" />
       </AuthProvider>
     </QueryClientProvider>

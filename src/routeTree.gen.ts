@@ -17,6 +17,7 @@ import { Route as BibliotecaRouteImport } from './routes/biblioteca'
 import { Route as ContactoRouteImport } from './routes/contacto'
 import { Route as CursosRouteImport } from './routes/cursos'
 import { Route as DonaRouteImport } from './routes/dona'
+import { Route as EnConstruccionRouteImport } from './routes/en-construccion'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as NoticiasRouteImport } from './routes/noticias'
 import { Route as QuienesSomosRouteImport } from './routes/quienes-somos'
@@ -67,6 +68,11 @@ const CursosRoute = CursosRouteImport.update({
 const DonaRoute = DonaRouteImport.update({
   id: '/dona',
   path: '/dona',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnConstruccionRoute = EnConstruccionRouteImport.update({
+  id: '/en-construccion',
+  path: '/en-construccion',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -135,6 +141,7 @@ export interface FileRoutesByFullPath {
   '/contacto': typeof ContactoRoute
   '/cursos': typeof CursosRoute
   '/dona': typeof DonaRoute
+  '/en-construccion': typeof EnConstruccionRoute
   '/login': typeof LoginRoute
   '/noticias': typeof NoticiasRoute
   '/quienes-somos': typeof QuienesSomosRoute
@@ -156,6 +163,7 @@ export interface FileRoutesByTo {
   '/contacto': typeof ContactoRoute
   '/cursos': typeof CursosRoute
   '/dona': typeof DonaRoute
+  '/en-construccion': typeof EnConstruccionRoute
   '/login': typeof LoginRoute
   '/noticias': typeof NoticiasRoute
   '/quienes-somos': typeof QuienesSomosRoute
@@ -178,6 +186,7 @@ export interface FileRoutesById {
   '/contacto': typeof ContactoRoute
   '/cursos': typeof CursosRoute
   '/dona': typeof DonaRoute
+  '/en-construccion': typeof EnConstruccionRoute
   '/login': typeof LoginRoute
   '/noticias': typeof NoticiasRoute
   '/quienes-somos': typeof QuienesSomosRoute
@@ -201,6 +210,7 @@ export interface FileRouteTypes {
     | '/contacto'
     | '/cursos'
     | '/dona'
+    | '/en-construccion'
     | '/login'
     | '/noticias'
     | '/quienes-somos'
@@ -222,6 +232,7 @@ export interface FileRouteTypes {
     | '/contacto'
     | '/cursos'
     | '/dona'
+    | '/en-construccion'
     | '/login'
     | '/noticias'
     | '/quienes-somos'
@@ -243,6 +254,7 @@ export interface FileRouteTypes {
     | '/contacto'
     | '/cursos'
     | '/dona'
+    | '/en-construccion'
     | '/login'
     | '/noticias'
     | '/quienes-somos'
@@ -265,6 +277,7 @@ export interface RootRouteChildren {
   ContactoRoute: typeof ContactoRoute
   CursosRoute: typeof CursosRoute
   DonaRoute: typeof DonaRoute
+  EnConstruccionRoute: typeof EnConstruccionRoute
   LoginRoute: typeof LoginRoute
   NoticiasRoute: typeof NoticiasRoute
   QuienesSomosRoute: typeof QuienesSomosRoute
@@ -334,6 +347,13 @@ declare module '@tanstack/react-router' {
       path: '/dona'
       fullPath: '/dona'
       preLoaderRoute: typeof DonaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en-construccion': {
+      id: '/en-construccion'
+      path: '/en-construccion'
+      fullPath: '/en-construccion'
+      preLoaderRoute: typeof EnConstruccionRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -425,6 +445,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactoRoute: ContactoRoute,
   CursosRoute: CursosRoute,
   DonaRoute: DonaRoute,
+  EnConstruccionRoute: EnConstruccionRoute,
   LoginRoute: LoginRoute,
   NoticiasRoute: NoticiasRoute,
   QuienesSomosRoute: QuienesSomosRoute,
